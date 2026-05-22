@@ -1,95 +1,76 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { HomeBan } from "@/components/home/HomeBan";
+import { HomeLoadingController } from "@/components/home/HomeLoadingController";
+import { HomeMain } from "@/components/home/HomeMain";
+import { SiteShell } from "@/components/site/SiteShell";
+import { SITE_URL, themeAsset } from "@/lib/config";
+import { getHomeData, getNavNewFlags, getSiteInfo } from "@/lib/wp";
+import type { Metadata } from "next";
 
-export default function Home() {
+const HOME_DESCRIPTION =
+  "東京世田谷区でホームページ制作、音楽制作を行う、合同会社キイチゴのホームページ";
+
+export async function generateMetadata(): Promise<Metadata> {
+  let title = "合同会社キイチゴ";
+  try {
+    const site = await getSiteInfo();
+    if (site.name) title = site.name;
+  } catch {
+    /* WP 未起動時 */
+  }
+
+  const canonical = SITE_URL ? `${SITE_URL}/` : "https://kiichigo.work/";
+  const ogp = themeAsset("img/ogp.jpg");
+
+  return {
+    title,
+    description: HOME_DESCRIPTION,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description: HOME_DESCRIPTION,
+      url: canonical,
+      siteName: title,
+      type: "article",
+      images: [{ url: ogp }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@Kiichigo_llc",
+      title,
+      description: HOME_DESCRIPTION,
+      images: [ogp],
+    },
+  };
+}
+
+export default async function HomePage() {
+  const [home, navNew] = await Promise.all([getHomeData(), getNavNewFlags()]);
+
+  let title = "合同会社キイチゴ";
+  try {
+    const site = await getSiteInfo();
+    if (site.name) title = site.name;
+  } catch {
+    /* fallback */
+  }
+
+  const canonical = SITE_URL ? `${SITE_URL}/` : "https://kiichigo.work/";
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <>
+      <HomeLoadingController />
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <SiteShell
+        title={title}
+        description={HOME_DESCRIPTION}
+        canonicalUrl={canonical}
+        isHome
+        navNew={navNew}
+        includeJsonLd
+      >
+        <HomeMain home={home} />
+        <HomeBan />
+      </SiteShell>
+    </>
   );
 }
