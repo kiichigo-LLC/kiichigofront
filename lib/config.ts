@@ -1,16 +1,23 @@
 /** WordPress 本体の URL（末尾スラッシュなし） */
 export const WP_SITE_URL =
-  process.env.WP_SITE_URL ?? "http://localhost:8080";
+  process.env.WP_SITE_URL ?? "http://localhost:18080";
 
 /**
- * テーマ静的ファイル（css / js / img）
- * 開発時は /wp-theme プロキシ（next.config rewrites）で同一オリジンにし CORS を回避
+ * テーマ URI（WP の get_template_directory_uri() 相当）
+ * 例: http://localhost:18080/wp-content/themes/main
  */
-export const THEME_URL =
+function wpSiteOrigin(): string {
+  return (
+    process.env.NEXT_PUBLIC_WP_SITE_URL ??
+    process.env.WP_SITE_URL ??
+    "http://localhost:18080"
+  ).replace(/\/$/, "");
+}
+
+export const THEME_URL = (
   process.env.NEXT_PUBLIC_WP_THEME_URL ??
-  (process.env.NODE_ENV === "development"
-    ? "/wp-theme"
-    : `${WP_SITE_URL}/wp-content/themes/main`);
+  `${wpSiteOrigin()}/wp-content/themes/main/public`
+).replace(/\/$/, "");
 
 export const WP_API_URL =
   process.env.WP_API_URL ?? `${WP_SITE_URL}/wp-json/wp/v2`;

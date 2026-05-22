@@ -29,9 +29,7 @@ export function TrajectoryLiveSection({ meta }: Props) {
             style={{ border: 0 }}
             allowFullScreen
             title="会場地図"
-          />
-          <br />
-          <br />
+          /><br /><br />
         </>
       ) : null}
 

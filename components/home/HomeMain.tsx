@@ -13,19 +13,16 @@ export function HomeMain({ home }: Props) {
         <div className="main-home">
           <div className="main-home-inr">
             <span>
-              {message}
-              <br />
+              {message}<br />
               {home.last_generated ? (
                 <>
                   <small>
                     <i>Log: {home.last_generated}</i>
-                  </small>
+                  </small><br />
                 </>
               ) : null}
-              <br />
               <small>
-                合同会社キイチゴ
-                <br />
+                合同会社キイチゴ<br />
                 🤖AI
               </small>
             </span>

@@ -29,8 +29,7 @@ export function AboutContent({ pageTitle }: Props) {
                 <tr>
                   <th style={{ whiteSpace: "nowrap" }}>社名</th>
                   <td>
-                    合同会社キイチゴ
-                    <br />
+                    合同会社キイチゴ<br />
                     <small>(英文名称：Kiichigo LLC)</small>
                   </td>
                 </tr>
@@ -86,8 +85,7 @@ export function AboutContent({ pageTitle }: Props) {
                 <tr>
                   <th style={{ whiteSpace: "nowrap" }}>取引銀行</th>
                   <td>
-                    三井住友銀行
-                    <br />
+                    三井住友銀行<br />
                     大和ネクスト銀行
                   </td>
                 </tr>
@@ -132,8 +130,7 @@ export function AboutContent({ pageTitle }: Props) {
             />
           </div>
           <div className="page-main-text">
-            モ・ベターデザインの中村健さんによるデザイン
-            <br />
+            モ・ベターデザインの中村健さんによるデザイン<br />
             <a href="http://www.mobetter.jp/" target="_blank" rel="noreferrer">
               MO&apos; BETTER DESIGN
             </a>
