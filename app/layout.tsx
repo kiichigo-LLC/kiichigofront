@@ -1,6 +1,10 @@
-import { themeAsset } from "@/lib/config";
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
+import { HomeLoading } from "@/components/home-loading";
+import { LayoutScripts } from "@/components/layout-scripts";
+import { asset } from "utils/config";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -11,37 +15,36 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="ja" className="loading-delay">
       <head>
         <meta charSet="utf-8" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="stylesheet" href={themeAsset("css/swiper.min.css")} />
-        <link rel="stylesheet" href={themeAsset("css/style.css?v169")} />
-        <link rel="icon" href={themeAsset("img/favicon.ico")} />
-        <link rel="apple-touch-icon" href={themeAsset("img/appHomeIcon.png")} />
+        <link rel="stylesheet" href={asset("css/style.css?v169")} />
+        <link rel="icon" href={asset("img/favicon.ico")} />
+        <link rel="apple-touch-icon" href={asset("img/appHomeIcon.png")} />
         <meta name="google" content="notranslate" />
         <meta name="application-name" content="合同会社キイチゴ" />
         <meta name="msapplication-TileColor" content="#FF5C00" />
         <meta
           name="msapplication-square70x70logo"
-          content={themeAsset("img/msapplication/tiny.png")}
+          content={asset("img/msapplication/tiny.png")}
         />
         <meta
           name="msapplication-square150x150logo"
-          content={themeAsset("img/msapplication/square.png")}
+          content={asset("img/msapplication/square.png")}
         />
         <meta
           name="msapplication-wide310x150logo"
-          content={themeAsset("img/msapplication/wide.png")}
+          content={asset("img/msapplication/wide.png")}
         />
         <meta
           name="msapplication-square310x310logo"
-          content={themeAsset("img/msapplication/large.png")}
+          content={asset("img/msapplication/large.png")}
         />
       </head>
       <body>
@@ -61,10 +64,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           src="https://code.jquery.com/jquery-3.5.1.js"
           integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
           crossOrigin="anonymous"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
         />
 
-        {children}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-58GB3CJ"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="gtm"
+          />
+        </noscript>
+
+        <HomeLoading />
+
+        <div className="wrap">
+          <Header />
+          {children}
+          <Footer />
+        </div>
+
+        <LayoutScripts />
       </body>
     </html>
   );

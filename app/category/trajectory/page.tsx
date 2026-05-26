@@ -1,52 +1,94 @@
-import { TrajectoryCategoryContent } from "@/components/category/TrajectoryCategoryContent";
-import { SiteShell } from "@/components/site/SiteShell";
-import { themeAsset } from "@/lib/config";
-import { getTrajectoryCategoryMetadata } from "@/lib/category-meta";
-import { getAllTags, getNavNewFlags, getTrajectoryListItems } from "@/lib/wp";
 import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { PageWarning } from "@/components/page-parts";
+import { DESC_TRAJ, pageMeta, titleWithSite } from "@/lib/seo";
+import { WP, path, strip, trajDate, wpPath } from "@/lib/wp";
+
+const CATEGORY_SLUG = "trajectory";
+const CATEGORY_ID = 4;
+const META_TITLE = "ブログ";
+const H1 = "ブログ";
+
+async function getPosts() {
+  const res = await fetch(
+    `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc`,
+    { next: { revalidate: 60 } }
+  );
+  if (!res.ok) return [];
+  return res.json();
+}
+
+async function getAllTags() {
+  const res = await fetch(
+    `${WP}/tags?per_page=100&orderby=count&order=desc&hide_empty=true`,
+    { next: { revalidate: 60 } }
+  );
+  if (!res.ok) return [];
+  const tags: any[] = await res.json();
+  return tags.filter((t) => t.slug !== "portfolio" && t.id !== 49);
+}
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, description, canonical } = await getTrajectoryCategoryMetadata();
-  const ogp = themeAsset("img/ogp.jpg");
-
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: {
-      title,
-      description,
-      url: canonical,
-      type: "article",
-      images: [{ url: ogp }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@Kiichigo_llc",
-      title,
-      description,
-      images: [ogp],
-    },
-  };
+  return pageMeta({
+    title: titleWithSite(META_TITLE),
+    description: DESC_TRAJ,
+    path: `/category/${CATEGORY_SLUG}`,
+  });
 }
 
 export default async function TrajectoryCategoryPage() {
-  const [navNew, tags, items, meta] = await Promise.all([
-    getNavNewFlags(),
-    getAllTags(),
-    getTrajectoryListItems(),
-    getTrajectoryCategoryMetadata(),
-  ]);
+  const cat = await fetch(`${WP}/categories?slug=${CATEGORY_SLUG}`, {
+    next: { revalidate: 60 },
+  });
+  if (!cat.ok) notFound();
+  const cats: any = await cat.json();
+  if (!cats[0]?.id) notFound();
+
+  const [tags, posts]: any[] = await Promise.all([getAllTags(), getPosts()]);
 
   return (
-    <SiteShell
-      title={meta.title}
-      description={meta.description}
-      canonicalUrl={meta.canonical}
-      navNew={navNew}
-      showTrajectoryNav
-    >
-      <TrajectoryCategoryContent tags={tags} items={items} />
-    </SiteShell>
+    <div className="category elm">
+        <div className="category-inr elm-inr">
+          <h1 className="category-title elm-ttl">
+            <span>{H1}</span>
+          </h1>
+          <div className="tag-cloud">
+            <div className="tag-cloud-list">
+              <ol>
+                {tags.map((tag: any) => (
+                  <li key={tag.id}>
+                    <Link href={path(wpPath(tag.link))}>
+                      <span>
+                        <small>#</small>
+                        {tag.name}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+          <div className="category-main">
+            <div className="category-main-inr">
+              {posts.map((p: any) => (
+                <div className="category-list" key={p.id}>
+                  <ul>
+                    <li>
+                      <Link href={path(wpPath(p.link))}>
+                        <span className="category-list-date">{trajDate(p.date)}</span>
+                        <span className="category-list-title">
+                          {strip(p.title.rendered)}
+                        </span>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+          <PageWarning />
+        </div>
+      </div>
   );
 }

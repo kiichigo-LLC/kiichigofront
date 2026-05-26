@@ -1,51 +1,80 @@
-import { PortfolioDtpContent } from "@/components/portfolio/PortfolioDtpContent";
-import { SiteShell } from "@/components/site/SiteShell";
-import { themeAsset } from "@/lib/config";
-import { getPortfolioDtpMetadata } from "@/lib/category-meta";
-import { getDtpGalleryImages } from "@/lib/portfolio";
-import { getNavNewFlags } from "@/lib/wp";
 import type { Metadata } from "next";
+import Link from "next/link";
+import { PageWarning } from "@/components/page-parts";
+import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
+import { WP, path } from "@/lib/wp";
+
+async function getDtpImages() {
+  const res = await fetch(`${WP}/pages?slug=dtp`, { next: { revalidate: 60 } });
+  if (!res.ok) return [];
+  const pages: any = await res.json();
+  const html = pages[0]?.content?.rendered || "";
+  const m = html.match(/\[gallery[^\]]*ids=["']([^"']+)["']/);
+  if (!m?.[1]) return [];
+  const ids = m[1].split(",").map((s: string) => parseInt(s.trim(), 10)).filter((n: number) => n > 0);
+  const images: { id: number; url: string }[] = [];
+  for (const id of ids) {
+    const mr = await fetch(`${WP}/media/${id}`, { next: { revalidate: 60 } });
+    if (!mr.ok) continue;
+    const media: any = await mr.json();
+    if (media.source_url) images.push({ id: media.id, url: media.source_url });
+  }
+  return images;
+}
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, description, canonical } = await getPortfolioDtpMetadata();
-  const ogp = themeAsset("img/ogp.jpg");
-
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: {
-      title,
-      description,
-      url: canonical,
-      type: "article",
-      images: [{ url: ogp }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@Kiichigo_llc",
-      title,
-      description,
-      images: [ogp],
-    },
-  };
+  return pageMeta({
+    title: titleWithSite("DTP系ポートフォリオ"),
+    description: DESC_SITE,
+    path: "/portfolio/dtp",
+    noIndex: true,
+  });
 }
 
 export default async function PortfolioDtpPage() {
-  const [navNew, images, meta] = await Promise.all([
-    getNavNewFlags(),
-    getDtpGalleryImages("dtp"),
-    getPortfolioDtpMetadata(),
-  ]);
+  const images = await getDtpImages();
 
   return (
-    <SiteShell
-      title={meta.title}
-      description={meta.description}
-      canonicalUrl={meta.canonical}
-      navNew={navNew}
-    >
-      <PortfolioDtpContent images={images} />
-    </SiteShell>
+    <div className="category elm">
+        <div className="category-inr elm-inr">
+          <h1 className="category-title elm-ttl">
+            <span>DTP系ポートフォリオ</span>
+          </h1>
+          <blockquote className="single-title-sub elm-ttl-sub">
+            <Link href={path("/portfolio")} style={{ borderBottom: "1px solid #ff0348" }} target="_blank">
+              <b>←</b> WEB系
+            </Link>
+            ｜
+            <a
+              href="https://kiichigonokami.com/#unkr-04"
+              style={{ borderBottom: "1px solid #ff0348" }}
+              target="_blank"
+              rel="noreferrer"
+            >
+              スキルシート
+            </a>
+          </blockquote>
+          <div className="category-main dtp">
+            <div className="category-main-inr elm-flex between">
+              {images.length > 0 ? (
+                images.map((image) => (
+                  <div className="elm-box dtp" key={image.id}>
+                    <div className="elm-box-inr">
+                      <div className="elm-box-img">
+                        <a href={image.url} className="group">
+                          <img src={image.url} className="dsn contain" alt="" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>ギャラリーが見つかりません。</p>
+              )}
+            </div>
+          </div>
+          <PageWarning />
+        </div>
+      </div>
   );
 }

@@ -1,76 +1,69 @@
-import { HomeBan } from "@/components/home/HomeBan";
-import { HomeLoadingController } from "@/components/home/HomeLoadingController";
-import { HomeMain } from "@/components/home/HomeMain";
-import { SiteShell } from "@/components/site/SiteShell";
-import { SITE_URL, themeAsset } from "@/lib/config";
-import { getHomeData, getNavNewFlags, getSiteInfo } from "@/lib/wp";
 import type { Metadata } from "next";
+import { SiteJsonLd } from "@/components/site-json-ld";
+import { DESC_HOME, pageMeta } from "@/lib/seo";
+import { SITE_NAME, asset, canonical } from "@/lib/wp";
 
-const HOME_DESCRIPTION =
-  "東京世田谷区でホームページ制作、音楽制作を行う、合同会社キイチゴのホームページ";
+const HOME_MSG =
+  process.env.NEXT_PUBLIC_HOME_MESSAGE || "まだ生成されていません";
+const HOME_LOG = process.env.NEXT_PUBLIC_HOME_LAST_GENERATED || "";
 
 export async function generateMetadata(): Promise<Metadata> {
-  let title = "合同会社キイチゴ";
-  try {
-    const site = await getSiteInfo();
-    if (site.name) title = site.name;
-  } catch {
-    /* WP 未起動時 */
-  }
-
-  const canonical = SITE_URL ? `${SITE_URL}/` : "https://kiichigo.work/";
-  const ogp = themeAsset("img/ogp.jpg");
-
-  return {
-    title,
-    description: HOME_DESCRIPTION,
-    alternates: { canonical },
-    openGraph: {
-      title,
-      description: HOME_DESCRIPTION,
-      url: canonical,
-      siteName: title,
-      type: "article",
-      images: [{ url: ogp }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@Kiichigo_llc",
-      title,
-      description: HOME_DESCRIPTION,
-      images: [ogp],
-    },
-  };
+  return pageMeta({
+    title: SITE_NAME,
+    description: DESC_HOME,
+    path: "/",
+  });
 }
 
-export default async function HomePage() {
-  const [home, navNew] = await Promise.all([getHomeData(), getNavNewFlags()]);
-
-  let title = "合同会社キイチゴ";
-  try {
-    const site = await getSiteInfo();
-    if (site.name) title = site.name;
-  } catch {
-    /* fallback */
-  }
-
-  const canonical = SITE_URL ? `${SITE_URL}/` : "https://kiichigo.work/";
+export default function HomePage() {
+  const msg = HOME_MSG.replace(/（/g, "(").replace(/）/g, ")");
+  const showBan = new Date() < new Date("2026-09-26T00:00:00+09:00");
 
   return (
     <>
-      <HomeLoadingController />
-
-      <SiteShell
-        title={title}
-        description={HOME_DESCRIPTION}
-        canonicalUrl={canonical}
-        isHome
-        navNew={navNew}
-        includeJsonLd
-      >
-        <HomeMain home={home} />
-        <HomeBan />
-      </SiteShell>
+      <SiteJsonLd title={SITE_NAME} description={DESC_HOME} url={canonical("/")} />
+      <div className="main">
+        <div className="main-inr">
+          <div className="main-home">
+            <div className="main-home-inr">
+              <span>
+                {msg}
+                <br />
+                {HOME_LOG ? (
+                  <>
+                    <small>
+                      <i>Log: {HOME_LOG}</i>
+                    </small>
+                    <br />
+                  </>
+                ) : null}
+                <small>
+                  合同会社キイチゴ
+                  <br />
+                  🤖AI
+                </small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showBan ? (
+        <div className="ban landscape">
+          <div className="ban-img landscape">
+            <a
+              href="https://network.mobile.rakuten.co.jp/area/campaign/corporation/?scid=mi_rmb_web_promojp_invi_bnr_RWPS005269&corpid=RWPS005269"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src={asset("img/out/rmobile_1200x628.png")}
+                alt="楽天モバイル特別優待キャンペーン"
+                loading="lazy"
+              />
+            </a>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

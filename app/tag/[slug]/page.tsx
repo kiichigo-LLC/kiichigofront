@@ -1,85 +1,150 @@
-import { TagArchiveContent } from "@/components/tag/TagArchiveContent";
-import { SiteShell } from "@/components/site/SiteShell";
-import { SITE_URL, themeAsset } from "@/lib/config";
-import { getTagArchivePage, getTagCloudTags } from "@/lib/tag-archive";
-import { getNavNewFlags, getSiteInfo, permalinkToPath } from "@/lib/wp";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
+import { WP, path, strip, wpPath } from "@/lib/wp";
 
-type Props = {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ page?: string }>;
-};
+/** WP 管理画面の「1ページに表示する最大投稿数」（tag.php のメインクエリと揃える） */
+const TAG_ARCHIVE_PER_PAGE = 10;
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const tag = await getTagArchivePage(slug, 1);
-  if (!tag) {
-    return { title: "タグがありません" };
-  }
-
-  let siteName = "合同会社キイチゴ";
-  try {
-    const site = await getSiteInfo();
-    if (site.name) siteName = site.name;
-  } catch {
-    /* fallback */
-  }
-
-  const title = `“${tag.tag.name}” 一覧｜${siteName}`;
-  const canonical = SITE_URL
-    ? `${SITE_URL.replace(/\/$/, "")}/tag/${slug}`
-    : `https://kiichigo.work/tag/${slug}`;
-  const ogp = themeAsset("img/ogp.jpg");
-
+async function getTagPage(tagSlug: string, pageNum: number) {
+  const t = await fetch(`${WP}/tags?slug=${encodeURIComponent(tagSlug)}`, {
+    next: { revalidate: 60 },
+  });
+  if (!t.ok) return null;
+  const tags: any = await t.json();
+  const tag = tags[0];
+  if (!tag) return null;
+  const res = await fetch(
+    `${WP}/posts?tags=${tag.id}&per_page=${TAG_ARCHIVE_PER_PAGE}&page=${pageNum}&orderby=date&order=desc`,
+    { next: { revalidate: 60 } }
+  );
+  if (!res.ok) return null;
+  const posts = await res.json();
+  const total = parseInt(res.headers.get("x-wp-totalpages") || "1", 10);
   return {
-    title,
-    alternates: { canonical },
-    openGraph: {
-      title,
-      url: canonical,
-      type: "article",
-      images: [{ url: ogp }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@Kiichigo_llc",
-      title,
-      images: [ogp],
-    },
+    tag,
+    posts,
+    page: pageNum,
+    totalPages: total,
   };
 }
 
-export default async function TagArchivePage({ params, searchParams }: Props) {
+async function getAllTags() {
+  const res = await fetch(
+    `${WP}/tags?per_page=100&orderby=count&order=desc&hide_empty=true`,
+    { next: { revalidate: 60 } }
+  );
+  if (!res.ok) return [];
+  const tags: any[] = await res.json();
+  // tag.php: portfolio タグはクラウドから除外
+  return tags.filter((t) => t.slug !== "portfolio" && t.id !== 49);
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const data = await getTagPage(slug, 1);
+  if (!data) return { title: "タグがありません" };
+  return pageMeta({
+    title: titleWithSite(`“${data.tag.name}” 一覧`),
+    description: DESC_SITE,
+    path: `/tag/${slug}`,
+  });
+}
+
+export default async function TagPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string }>;
+}) {
   const { slug } = await params;
   const { page: pageParam } = await searchParams;
-  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+  const pageNum = Math.max(1, parseInt(pageParam || "1", 10) || 1);
 
-  const [navNew, archive, cloudTags] = await Promise.all([
-    getNavNewFlags(),
-    getTagArchivePage(slug, page),
-    getTagCloudTags(),
+  const [archive, cloudTags] = await Promise.all([
+    getTagPage(slug, pageNum),
+    getAllTags(),
   ]);
+  if (!archive) notFound();
 
-  if (!archive) {
-    notFound();
-  }
-
-  const canonical = SITE_URL
-    ? `${SITE_URL.replace(/\/$/, "")}${permalinkToPath(archive.tag.link)}`
-    : `https://kiichigo.work${permalinkToPath(archive.tag.link)}`;
-
-  const shellTitle = `“${archive.tag.name}” 一覧｜合同会社キイチゴ`;
+  const tagPath = `/tag/${slug}`;
+  const quotedTitle = `“${archive.tag.name}” 一覧`;
 
   return (
-    <SiteShell
-      title={shellTitle}
-      description={shellTitle}
-      canonicalUrl={canonical}
-      navNew={navNew}
-      isTagPage
-    >
-      <TagArchiveContent archive={archive} cloudTags={cloudTags} />
-    </SiteShell>
+    <div className="tag elm">
+        <div className="tag-inr elm-inr">
+          <div className="tag-main">
+            <div className="tag-main-inr">
+              <h1 className="tag-title elm-ttl">
+                <span>{quotedTitle}</span>
+              </h1>
+              <div className="tag-cloud">
+                <div className="tag-cloud-list">
+                  <ol>
+                    {cloudTags.map((t: any) => (
+                      <li key={t.id}>
+                        <Link href={path(wpPath(t.link))}>
+                          <span>
+                            <small>#</small>
+                            {t.name}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+              <div className="category-main">
+                <div className="category-main-inr">
+                  {archive.posts.map((p: any) => (
+                    <div className="category-list" key={p.id}>
+                      <ul>
+                        <li>
+                          <Link href={path(wpPath(p.link))}>
+                            <span className="category-list-title">
+                              {strip(p.title.rendered)}
+                            </span>
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="pagenav">
+                <div className="pagenav-inr">
+                  <div className="pagenav-prev">
+                    {archive.page > 1 ? (
+                      <Link
+                        href={
+                          archive.page === 2
+                            ? path(tagPath)
+                            : path(`${tagPath}?page=${archive.page - 1}`)
+                        }
+                      >
+                        前へ
+                      </Link>
+                    ) : null}
+                  </div>
+                  <div className="pagenav-center"> ｜{archive.tag.name} | </div>
+                  <div className="pagenav-next">
+                    {archive.page < archive.totalPages ? (
+                      <Link href={path(`${tagPath}?page=${archive.page + 1}`)}>
+                        次へ
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   );
 }
