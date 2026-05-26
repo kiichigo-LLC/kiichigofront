@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageWarning } from "@/components/page-parts";
 import { DESC_TRAJ, pageMeta, titleWithSite } from "@/lib/seo";
-import { WP, path, strip, trajDate, wpPath } from "@/lib/wp";
+import { WP, getArchiveTags, path, strip, trajDate, wpPath } from "@/lib/wp";
 
 const CATEGORY_SLUG = "trajectory";
 const CATEGORY_ID = 4;
@@ -19,21 +19,11 @@ async function getPosts() {
   return res.json();
 }
 
-async function getAllTags() {
-  const res = await fetch(
-    `${WP}/tags?per_page=100&orderby=count&order=desc&hide_empty=true`,
-    { next: { revalidate: 60 } }
-  );
-  if (!res.ok) return [];
-  const tags: any[] = await res.json();
-  return tags.filter((t) => t.slug !== "portfolio" && t.id !== 49);
-}
-
 export async function generateMetadata(): Promise<Metadata> {
   return pageMeta({
     title: titleWithSite(META_TITLE),
     description: DESC_TRAJ,
-    path: `/category/${CATEGORY_SLUG}`,
+    path: `/${CATEGORY_SLUG}`,
   });
 }
 
@@ -45,7 +35,7 @@ export default async function TrajectoryCategoryPage() {
   const cats: any = await cat.json();
   if (!cats[0]?.id) notFound();
 
-  const [tags, posts]: any[] = await Promise.all([getAllTags(), getPosts()]);
+  const [tags, posts]: any[] = await Promise.all([getArchiveTags(), getPosts()]);
 
   return (
     <div className="category elm">
@@ -58,7 +48,7 @@ export default async function TrajectoryCategoryPage() {
               <ol>
                 {tags.map((tag: any) => (
                   <li key={tag.id}>
-                    <Link href={path(wpPath(tag.link))}>
+                    <Link href={path(`/tag/${tag.slug}`)}>
                       <span>
                         <small>#</small>
                         {tag.name}

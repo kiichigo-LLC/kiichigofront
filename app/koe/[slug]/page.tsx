@@ -12,7 +12,7 @@ import { WP, featuredImg, hasPortfolioTag, metaStr, strip } from "@/lib/wp";
 const CATEGORY_SLUG = "koe";
 const CATEGORY_ID = 3;
 
-type Search = { slug?: string };
+type Params = { slug: string };
 
 async function getPost(slug: string) {
   const res = await fetch(
@@ -42,12 +42,11 @@ async function getAdjacent(currentSlug: string) {
 }
 
 export async function generateMetadata({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<Search>;
+  params: Promise<Params>;
 }): Promise<Metadata> {
-  const { slug } = await searchParams;
-  if (!slug) return { title: "記事がありません" };
+  const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "記事がありません" };
   const title = strip(post.title.rendered);
@@ -56,12 +55,11 @@ export async function generateMetadata({
 }
 
 export default async function KoeSinglePage({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<Search>;
+  params: Promise<Params>;
 }) {
-  const { slug } = await searchParams;
-  if (!slug) notFound();
+  const { slug } = await params;
 
   const post = await getPost(slug);
   if (!post || (post.categories && !post.categories.includes(CATEGORY_ID))) {

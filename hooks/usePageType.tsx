@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 
-/** `/web/foo` のようにカテゴリ直下の記事 URL か（rewrite 後の公開 pathname） */
+/** `/web/foo` のように一覧 `/web` より下の記事 URL か */
 function isArticlePath(pathname: string, section: "koe" | "web" | "trajectory") {
   const prefix = `/${section}/`;
   return pathname.startsWith(prefix) && pathname.length > prefix.length;
@@ -19,18 +19,13 @@ function isArticlePath(pathname: string, section: "koe" | "web" | "trajectory") 
 export function pageType(pathname: string) {
   const isHome = pathname === "/";
   const isContact = pathname === "/contact";
-  const isTag = pathname.startsWith("/tag/");
-
-  const showTrajectoryNav =
-    pathname.startsWith("/category/trajectory") ||
-    isArticlePath(pathname, "trajectory");
+  const isTag = pathname === "/tag" || pathname.startsWith("/tag/");
 
   return {
     pathname,
     isHome,
     isContact,
     isTag,
-    showTrajectoryNav,
     loadContactForm: isContact,
     loadPrism: isArticlePath(pathname, "trajectory"),
     loadSingleWebIframe: isArticlePath(pathname, "web"),

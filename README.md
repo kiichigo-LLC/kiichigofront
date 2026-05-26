@@ -7,8 +7,10 @@
 | 場所 | 内容 |
 |------|------|
 | `app/page.tsx` など | 固定ページ |
-| `app/category/koe/page.tsx` など | カテゴリ一覧 |
-| `app/single/koe/page.tsx` など | 記事詳細（rewrite で `?slug=`） |
+| `app/koe/page.tsx` など | カテゴリ一覧（`/koe`） |
+| `app/koe/[slug]/page.tsx` など | 記事詳細（`/koe/記事スラッグ`） |
+| `app/tag/page.tsx` | タグ一覧（`/tag`） |
+| `app/tag/[slug]/page.tsx` | タグ別投稿一覧（`/tag/スラッグ`） |
 | `app/layout.tsx` | `<html>`・共通 CSS / GTM / jQuery・`Header` / `Footer`・`LayoutScripts` |
 | `components/header.tsx` | Client。`usePageType` でナビ active |
 | `components/layout-scripts.tsx` | Client。`usePageType` で読み込む追加 JS |
@@ -24,10 +26,9 @@
 
 ### カテゴリを増やすとき
 
-1. `app/category/○○/page.tsx` をコピー
-2. `app/single/○○/page.tsx` をコピー
-3. `next.config.ts` の `rewrites` に1行追加
-4. ページ別 JS が要れば `hooks/usePageType.tsx` の `pageType()` に判定を追加
+1. `app/○○/page.tsx`（一覧）をコピー
+2. `app/○○/[slug]/page.tsx`（記事）をコピー
+3. ページ別 JS が要れば `hooks/usePageType.tsx` の `pageType()` に判定を追加
 
 ## データ
 

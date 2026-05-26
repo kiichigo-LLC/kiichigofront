@@ -2,40 +2,43 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageWarning } from "@/components/page-parts";
-import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
+import { DESC_WEB_CAT, pageMeta, titleWithSite } from "@/lib/seo";
 import {
   WP,
   asset,
   featuredImg,
+  hasPortfolioTag,
   metaStr,
   path,
   strip,
   wpPath,
+  PORTFOLIO_TAG_ID,
 } from "@/lib/wp";
 
-const CATEGORY_SLUG = "koe";
-const CATEGORY_ID = 3;
-const META_TITLE = "合同会社キイチゴの声の仕事一覧";
-const H1 = "歌・作詞・作曲・ナレーション";
+const CATEGORY_SLUG = "web";
+const CATEGORY_ID = 2;
+const META_TITLE = "合同会社キイチゴのウェブの仕事一覧";
+const H1 = "ホームページ制作・システム開発";
 
 async function getPosts() {
   const res = await fetch(
-    `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia`,
+    `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia,wp:term&tags_exclude=${PORTFOLIO_TAG_ID}`,
     { next: { revalidate: 60 } }
   );
   if (!res.ok) return [];
-  return res.json();
+  const posts: any[] = await res.json();
+  return posts.filter((p) => !hasPortfolioTag(p));
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMeta({
     title: titleWithSite(META_TITLE),
-    description: DESC_SITE,
-    path: `/category/${CATEGORY_SLUG}`,
+    description: DESC_WEB_CAT,
+    path: `/${CATEGORY_SLUG}`,
   });
 }
 
-export default async function KoeCategoryPage() {
+export default async function WebCategoryPage() {
   const cat = await fetch(`${WP}/categories?slug=${CATEGORY_SLUG}`, {
     next: { revalidate: 60 },
   });
@@ -56,12 +59,12 @@ export default async function KoeCategoryPage() {
           </h1>
           <blockquote className="single-title-sub elm-ttl-sub">
             <a
-              href="https://rubu.studio/"
+              href="https://kiichigonokami.com/#unkr-04"
               style={{ borderBottom: "1px solid #ff0348" }}
               target="_blank"
               rel="noreferrer"
             >
-              機材リスト<small>と</small>録音サンプル
+              スキルシートはこちら
             </a>
           </blockquote>
           <div className="category-main">
@@ -77,6 +80,7 @@ export default async function KoeCategoryPage() {
                       backgroundSize: "cover" as const,
                     }
                   : undefined;
+                const dateLabel = metaStr(p.meta, "発表日");
                 return (
                   <div className="elm-box" key={p.id}>
                     <div className="elm-box-inr">
@@ -101,9 +105,9 @@ export default async function KoeCategoryPage() {
                             <span>{strip(p.title.rendered)}</span>
                           </div>
                           <div className="elm-box-disp-cap">{metaStr(p.meta, "h3")}</div>
-                          <div className="elm-box-disp-date">
-                            {metaStr(p.meta, "発表日")}
-                          </div>
+                          {dateLabel.trim() ? (
+                            <div className="elm-box-disp-date">{dateLabel}</div>
+                          ) : null}
                         </Link>
                       </div>
                     </div>

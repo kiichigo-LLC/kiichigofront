@@ -4,10 +4,9 @@ import { path } from "utils/config";
 
 function navSectionActive(pathname: string, section: string) {
   if (pathname === "/") return false;
-  // `/category/{section}` と `/{section}/...` の両方を active 扱いにする
+  // `/{section}` 一覧と `/{section}/記事` の両方を active 扱いにする
   return (
-    pathname.startsWith(`/category/${section}`) ||
-    pathname.startsWith(`/${section}/`)
+    pathname === `/${section}` || pathname.startsWith(`/${section}/`)
   );
 }
 
@@ -22,16 +21,8 @@ function ActiveLabel({
 }
 
 // 左カラム：会社概要・カテゴリ・お問い合わせなど
-function SiteNav({
-  pathname,
-  showTrajectoryNav,
-}: {
-  pathname: string;
-  showTrajectoryNav?: boolean;
-}) {
+function SiteNav({ pathname }: { pathname: string }) {
   const isHome = pathname === "/";
-  // ブログメニューは、明示指定または trajectory 配下で表示
-  const showBlog = showTrajectoryNav || navSectionActive(pathname, "trajectory");
   const aboutActive = pathname.startsWith("/about") && !isHome;
   const contactActive = pathname.startsWith("/contact") && !isHome;
   const koeActive = navSectionActive(pathname, "koe");
@@ -68,22 +59,20 @@ function SiteNav({
               </div>
             </li>
             <li>
-              <Link href={path("/category/koe")}>
+              <Link href={path("/koe")}>
                 <ActiveLabel active={koeActive}>声の仕事</ActiveLabel>
               </Link>
             </li>
             <li>
-              <Link href={path("/category/web")}>
+              <Link href={path("/web")}>
                 <ActiveLabel active={webActive}>ウェブの仕事</ActiveLabel>
               </Link>
             </li>
-            {showBlog && !isHome ? (
-              <li>
-                <Link href={path("/category/trajectory")}>
-                  <ActiveLabel active={trajectoryActive}>ブログ</ActiveLabel>
-                </Link>
-              </li>
-            ) : null}
+            <li>
+              <Link href={path("/trajectory")}>
+                <ActiveLabel active={trajectoryActive}>ブログ</ActiveLabel>
+              </Link>
+            </li>
             <li>
               <Link href={path("/contact")}>
                 <ActiveLabel active={contactActive}>お問い合わせ</ActiveLabel>
@@ -128,17 +117,11 @@ function SnsNav() {
 }
 
 /** header.tsx から呼ぶ。左=メインメニュー、右=SNS */
-export function Nav({
-  pathname,
-  showTrajectoryNav,
-}: {
-  pathname: string;
-  showTrajectoryNav?: boolean;
-}) {
+export function Nav({ pathname }: { pathname: string }) {
   return (
     <div className="header-nav-inr">
       <div className="header-nav-r">
-        <SiteNav pathname={pathname} showTrajectoryNav={showTrajectoryNav} />
+        <SiteNav pathname={pathname} />
       </div>
       <div className="header-nav-l">
         <SnsNav />

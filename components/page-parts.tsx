@@ -21,7 +21,7 @@ export function SingleBackNav({ categorySlug }: { categorySlug: string }) {
     <nav>
       <div className="single-back">
         <div className="single-back-link">
-          <Link href={path(`/category/${categorySlug}`)}>前に戻る</Link>
+          <Link href={path(`/${categorySlug}`)}>前に戻る</Link>
         </div>
       </div>
     </nav>

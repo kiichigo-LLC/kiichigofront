@@ -22,7 +22,8 @@ import {
 const CATEGORY_SLUG = "web";
 const CATEGORY_ID = 2;
 
-type Search = { slug?: string; from?: string };
+type Params = { slug: string };
+type Search = { from?: string };
 
 async function getPost(slug: string) {
   const res = await fetch(
@@ -70,12 +71,11 @@ async function getAdjacent(currentSlug: string) {
 }
 
 export async function generateMetadata({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<Search>;
+  params: Promise<Params>;
 }): Promise<Metadata> {
-  const { slug } = await searchParams;
-  if (!slug) return { title: "記事がありません" };
+  const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "記事がありません" };
   const title = strip(post.title.rendered);
@@ -84,12 +84,14 @@ export async function generateMetadata({
 }
 
 export default async function WebSinglePage({
+  params,
   searchParams,
 }: {
+  params: Promise<Params>;
   searchParams: Promise<Search>;
 }) {
-  const { slug, from } = await searchParams;
-  if (!slug) notFound();
+  const { slug } = await params;
+  const { from } = await searchParams;
 
   const post = await getPost(slug);
   if (!post || (post.categories && !post.categories.includes(CATEGORY_ID))) {
@@ -105,7 +107,7 @@ export default async function WebSinglePage({
     const fromPortfolio =
       from === "portfolio" || referer.includes("/portfolio/");
     if (!fromPortfolio) {
-      redirect(path("/category/web"));
+      redirect(path("/web"));
     }
   }
 

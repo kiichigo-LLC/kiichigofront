@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { WP } from "utils/config";
+
 export { SITE_NAME, SITE, THEME, WP, asset, path, canonical } from "utils/config";
 
 export const FORM_CHECK_URL =
@@ -116,6 +118,17 @@ export async function featuredImg(post: any): Promise<string> {
   }
 
   return "";
+}
+
+/** タグクラウド用（portfolio 除外。tag.php / ブログ一覧と同じ） */
+export async function getArchiveTags() {
+  const res = await fetch(
+    `${WP}/tags?per_page=100&orderby=count&order=desc&hide_empty=true`,
+    { next: { revalidate: 60 } }
+  );
+  if (!res.ok) return [];
+  const tags: any[] = await res.json();
+  return tags.filter((t) => t.slug !== "portfolio" && t.id !== 49);
 }
 
 export function trajDate(iso: string) {

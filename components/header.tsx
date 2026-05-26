@@ -6,7 +6,7 @@ import usePageType from "@hooks/usePageType";
 import { Nav } from "@components/nav";
 
 export function Header() {
-  const { pathname, isHome, showTrajectoryNav } = usePageType();
+  const { pathname, isHome } = usePageType();
   const LogoTag = isHome ? "h1" : "div";
 
   return (
@@ -24,7 +24,7 @@ export function Header() {
             </LogoTag>
           </div>
           <div className="header-nav">
-            <Nav pathname={pathname} showTrajectoryNav={showTrajectoryNav} />
+            <Nav pathname={pathname} />
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
-import { WP, path, strip, wpPath } from "@/lib/wp";
+import { WP, getArchiveTags, path, strip, wpPath } from "@/lib/wp";
 
 /** WP 管理画面の「1ページに表示する最大投稿数」（tag.php のメインクエリと揃える） */
 const TAG_ARCHIVE_PER_PAGE = 10;
@@ -28,17 +28,6 @@ async function getTagPage(tagSlug: string, pageNum: number) {
     page: pageNum,
     totalPages: total,
   };
-}
-
-async function getAllTags() {
-  const res = await fetch(
-    `${WP}/tags?per_page=100&orderby=count&order=desc&hide_empty=true`,
-    { next: { revalidate: 60 } }
-  );
-  if (!res.ok) return [];
-  const tags: any[] = await res.json();
-  // tag.php: portfolio タグはクラウドから除外
-  return tags.filter((t) => t.slug !== "portfolio" && t.id !== 49);
 }
 
 export async function generateMetadata({
@@ -69,7 +58,7 @@ export default async function TagPage({
 
   const [archive, cloudTags] = await Promise.all([
     getTagPage(slug, pageNum),
-    getAllTags(),
+    getArchiveTags(),
   ]);
   if (!archive) notFound();
 
@@ -89,7 +78,7 @@ export default async function TagPage({
                   <ol>
                     {cloudTags.map((t: any) => (
                       <li key={t.id}>
-                        <Link href={path(wpPath(t.link))}>
+                        <Link href={path(`/tag/${t.slug}`)}>
                           <span>
                             <small>#</small>
                             {t.name}
