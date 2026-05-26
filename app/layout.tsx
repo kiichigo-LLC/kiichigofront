@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:1234"
   ),
+  // app/favicon.ico があると Next デフォルトが /favicon.ico で勝つため、テーマ側を指定
+  icons: {
+    icon: asset("img/favicon.ico"),
+    apple: asset("img/appHomeIcon.png"),
+  },
 };
 
 export default function RootLayout({
@@ -25,8 +30,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="stylesheet" href={asset("css/style.css?v169")} />
-        <link rel="icon" href={asset("img/favicon.ico")} />
-        <link rel="apple-touch-icon" href={asset("img/appHomeIcon.png")} />
         <meta name="google" content="notranslate" />
         <meta name="application-name" content="合同会社キイチゴ" />
         <meta name="msapplication-TileColor" content="#FF5C00" />
