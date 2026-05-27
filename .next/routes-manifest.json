@@ -1,0 +1,152 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/koe/[slug]",
+      "regex": "^/koe/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/koe/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/tag/[slug]",
+      "regex": "^/tag/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/tag/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/trajectory/[slug]",
+      "regex": "^/trajectory/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/trajectory/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/web/[slug]",
+      "regex": "^/web/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/web/(?<nxtPslug>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
+    },
+    {
+      "page": "/contact/error",
+      "regex": "^/contact/error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact/error(?:/)?$"
+    },
+    {
+      "page": "/contact/thanks",
+      "regex": "^/contact/thanks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact/thanks(?:/)?$"
+    },
+    {
+      "page": "/dx",
+      "regex": "^/dx(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dx(?:/)?$"
+    },
+    {
+      "page": "/koe",
+      "regex": "^/koe(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/koe(?:/)?$"
+    },
+    {
+      "page": "/portfolio",
+      "regex": "^/portfolio(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portfolio(?:/)?$"
+    },
+    {
+      "page": "/portfolio/dtp",
+      "regex": "^/portfolio/dtp(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portfolio/dtp(?:/)?$"
+    },
+    {
+      "page": "/tag",
+      "regex": "^/tag(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tag(?:/)?$"
+    },
+    {
+      "page": "/trajectory",
+      "regex": "^/trajectory(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/trajectory(?:/)?$"
+    },
+    {
+      "page": "/web",
+      "regex": "^/web(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/web(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

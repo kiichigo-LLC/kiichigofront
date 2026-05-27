@@ -1,0 +1,19 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/about/page": "/about",
+  "/contact/page": "/contact",
+  "/contact/error/page": "/contact/error",
+  "/contact/thanks/page": "/contact/thanks",
+  "/dx/page": "/dx",
+  "/koe/page": "/koe",
+  "/page": "/",
+  "/koe/[slug]/page": "/koe/[slug]",
+  "/portfolio/page": "/portfolio",
+  "/tag/page": "/tag",
+  "/tag/[slug]/page": "/tag/[slug]",
+  "/trajectory/page": "/trajectory",
+  "/portfolio/dtp/page": "/portfolio/dtp",
+  "/trajectory/[slug]/page": "/trajectory/[slug]",
+  "/web/page": "/web",
+  "/web/[slug]/page": "/web/[slug]"
+}
