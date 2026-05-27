@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useEffect, useState } from "react";
 import { asset } from "utils/config";
 import usePageType from "@hooks/usePageType";
 
@@ -8,20 +9,39 @@ import usePageType from "@hooks/usePageType";
 export function LayoutScripts() {
   const { loadContactForm, loadPrism, loadSingleWebIframe, loadTagPlayer } =
     usePageType();
+  const [contactStep, setContactStep] = useState(0);
+
+  useEffect(() => {
+    if (loadContactForm) {
+      setContactStep(0);
+    }
+  }, [loadContactForm]);
 
   return (
     <>
       {loadContactForm ? (
         <>
           <Script
+            id="contact-validate"
             src={asset("js/jquery.validate.min.js")}
             strategy="afterInteractive"
+            onLoad={() => setContactStep(1)}
           />
-          <Script
-            src={asset("js/jquery.validate.japlugin.js")}
-            strategy="afterInteractive"
-          />
-          <Script src={asset("js/check.min.js?v1")} strategy="afterInteractive" />
+          {contactStep >= 1 ? (
+            <Script
+              id="contact-validate-ja"
+              src={asset("js/jquery.validate.japlugin.js")}
+              strategy="afterInteractive"
+              onLoad={() => setContactStep(2)}
+            />
+          ) : null}
+          {contactStep >= 2 ? (
+            <Script
+              id="contact-check"
+              src={asset("js/check.min.js?v1")}
+              strategy="afterInteractive"
+            />
+          ) : null}
         </>
       ) : null}
 
