@@ -1,0 +1,33 @@
+/* 変数セット
+------------------------------------------------------------ */
+@use "../common" as *;
+
+
+/*
+============================================================
+
+ボタン関連
+
+============================================================
+*/
+
+
+/* admin_btn */
+.admin_btn {
+  margin:24px auto 0;
+  text-align:center;
+  padding:12px 30px 12px 32px;
+  display: block;
+  color: $w0;
+  border:1px solid $tone_clr;
+  letter-spacing:4px;
+  background: $tone_clr;
+  font-size:(8px*2)+2;
+
+  &:hover {
+    border:1px solid rgba($b2,1.0);
+    top:1px;
+    position:relative;
+  }
+
+}

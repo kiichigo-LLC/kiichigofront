@@ -2,7 +2,7 @@
 
 import { WP } from "utils/config";
 
-export { SITE_NAME, SITE, THEME, WP, asset, path, canonical } from "utils/config";
+export { SITE_NAME, SITE, WP, asset, path, canonical } from "utils/config";
 
 export const FORM_CHECK_URL =
   process.env.NEXT_PUBLIC_FORM_CHECK_URL ||

@@ -1,0 +1,112 @@
+/*
+============================================================
+
+keyframes
+
+============================================================
+*/
+
+/* bgr
+------------------------------------------------------------ */
+@keyframes bgr01 {
+  0% {
+    transform: translateY(10px) rotate(45deg);
+  }
+  50% {
+    transform: translateY(10px) rotate(0);
+  }
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+}
+@keyframes bgr02 {
+  0% {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0);
+  }
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+}
+@keyframes active-bgr01 {
+  0% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(10px) rotate(0);
+  }
+  100% {
+    transform: translateY(10px) rotate(45deg);
+  }
+}
+@keyframes active-bgr03 {
+  0% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0);
+  }
+  100% {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+}
+
+@keyframes blur {
+  0% {
+    filter: blur(10px);
+  }
+  100% {
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity:0;
+        transform: scale(1.1, 1.1);
+    }
+    100% {
+        opacity:1;
+        transform: scale(1.0, 1.0);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
+}
+
+@keyframes noise_anima {
+  from { background-position: 0 0;}
+  to { background-position: 123px 456px;}
+}
+
+@-webkit-keyframes noise_anima {
+  from { background-position: 0 0; }
+  to { background-position: 123px 456px; }
+}
+@keyframes noise_anima {
+  from { background-position: 0 0; }
+  to { background-position: 123px 456px; }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale3d(1.4, 1.4, 1.4);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale3d(1.4, 1.4, 1.4);
+  }
+}

@@ -1,6 +1,6 @@
 # kiichigo — Next.js フロント
 
-`llc/` と同階層。HTML は Next（`app/**/page.tsx`）、css/js/img は WP テーマ `themes/main/public/` 配下。
+`llc/` と同階層。HTML は Next（`app/**/page.tsx`）、css/js/img は **`web/public/`**（旧 WP テーマ `themes/main/public/` から移行）。
 
 ## 構成
 
@@ -12,6 +12,7 @@
 | `app/tag/page.tsx` | タグ一覧（`/tag`） |
 | `app/tag/[slug]/page.tsx` | タグ別投稿一覧（`/tag/スラッグ`） |
 | `app/layout.tsx` | `<html>`・共通 CSS / GTM / jQuery・`Header` / `Footer`・`LayoutScripts` |
+| `public/css` `public/js` `public/img` `public/scss` | 静的アセット・SCSS ソース（icomoon フォント含む） |
 | `components/header.tsx` | Client。`usePageType` でナビ active |
 | `components/layout-scripts.tsx` | Client。`usePageType` で読み込む追加 JS |
 | `components/home-loading.tsx` | Client。トップの loading マスク |
@@ -44,17 +45,16 @@
 
 ## 静的ファイル
 
-`NEXT_PUBLIC_THEME_URL` → 例: `http://localhost:18080/wp-content/themes/main/public`
+`asset("css/style.css")` → `/css/style.css`（Next の `public/` を同一オリジンで配信。WP テーマ URL は不要）。
 
-`asset("css/style.css")` でテーマの CSS/JS/画像を読み込む。
+| コマンド | 内容 |
+|----------|------|
+| `npm run build:assets` | SCSS → `public/css/style.css`、主要 JS → `*.min.js` |
+| `npm run dev` | 上記ビルド後、SCSS/JS を watch しながら Next（`:1234`） |
+| `npm run build` | アセットビルド → `next build` |
+| `npm run sync-assets` | `llc` から `img` / `scss` のみ取り込み（任意） |
 
-### ローカルでフォント CORS
-
-HTML は `:1234`、アセットは `:18080` のためフォントだけ CORS になることがある。
-
-```bash
-cd ../llc && docker compose up -d --force-recreate wordpress
-```
+編集するのは `public/scss/` と `public/js/{script,check,player,toploading}.js`（本番参照は `*.min.js`）。
 
 ## ローカル
 

@@ -1,0 +1,356 @@
+/* 変数セット
+------------------------------------------------------------ */
+@use "../common" as *;
+
+
+/*
+============================================================
+
+form関連
+
+============================================================
+*/
+
+
+#box {
+  &-zip, &-address, &-tel, &-remarks {
+    display: none;
+  }
+}
+
+.form {
+  display:block;
+  padding: 0 0 0;
+  @media screen and (min-width: $brake_md+1) {
+    padding: 0 0 0;
+  }
+
+  &_title {
+    font-size:18px;
+    letter-spacing:2px;
+    padding:(4px*5);
+    border-bottom:1px solid $cc;
+    &_s {
+      font-size:12px;
+      color:$b7;
+    }
+  }
+
+  a {
+    color:$b3;
+    &:hover {
+      opacity: .6;
+    }
+  }
+
+  &-group {
+    display: flex;
+    justify-content:center;
+    width:100%;
+    margin:0 auto;
+    padding: 0 (4px*5) (8px*4);
+    flex-wrap: wrap;
+    @media screen and (min-width: $brake_md+1) {
+      padding: 0 (4px*0) (8px*2);
+    }
+
+    .multiple {
+      justify-content:flex-start;
+    }
+
+    .tate {
+      line-height:2.0;
+    }
+
+    .label {
+      width:100%;
+      text-align:left;
+      padding:(4px*0) (4px*0) (4px*2);
+      font-weight:500;
+      font-size:(8px*2);
+      @media screen and (min-width: $brake_md+1) {
+        width:30%;
+        padding:(4px*5);
+        text-align:right;
+      }
+    }
+
+    .input {
+      width:100%;
+      text-align:left;
+      padding:(4px*0) (4px*0) (4px*0);
+      position:relative;
+      @media screen and (min-width: $brake_md+1) {
+        width:70%;
+        padding:10px;
+      }
+
+      .l, .m, .s {
+        width: 100%;
+      }
+      .l {
+        @media screen and (min-width: $brake_md+1) {
+          width:95%;
+        }
+      }
+      .m {
+        @media screen and (min-width: $brake_md+1) {
+          width:60%;
+        }
+      }
+      .s {
+        @media screen and (min-width: $brake_md+1) {
+          width:30%;
+        }
+      }
+      .xs {
+        width:30%;
+        @media screen and (min-width: $brake_md+1) {
+          width:10%;
+        }
+      }
+      em {
+        position:relative;
+        margin:0 5px;
+        padding:0 0 0 0;
+        top:10px;
+        font-size:12px;
+        font-style:normal;
+      }
+
+      textarea {
+        width: 100%;
+        @media screen and (min-width: $brake_md+1) {
+          width: 80%;
+        }
+      }
+
+    }
+
+  }
+
+  /*---------------------------------------------------------------------------
+  ラジオボタン
+  ----------------------------------------------------------------------------*/
+  &-radio {
+    display: flex;
+    justify-content: flex-start;
+    margin:0;
+    padding:0;
+    flex-wrap: nowrap;
+    input {
+      display: none;
+    }
+    label {
+      display: block;
+      cursor: pointer;
+      width:150px;
+      margin: 0;
+      padding: 12px 5px;
+      border-right: 1px solid rgba($b9,0.7);
+      background:rgba($b9,0.6);
+      color:rgba($b5,0.9);
+      font-size: 14px;
+      text-align: center;
+      line-height: 1;
+      transition: .2s;
+      &:first-of-type {
+        border-radius: 3px 0 0 3px;
+      }
+      &:last-of-type {
+        border-right: 0px;
+        border-radius: 0 3px 3px 0;
+      }
+    }
+    input[type="radio"]:checked + label {
+      background-color:$tone_clr;
+      color:$w0;
+    }
+  }
+
+}
+
+.exlink {
+  position:absolute;
+  top:43px;
+  left:33%;
+  font-size:12px;
+  &:after {
+    content: "\f08e";
+    position:relative;
+    font-size:14px;
+    color:rgba($b1,1.0);
+    top:2px;
+    margin-left:5px;
+  }
+  a {
+    color:rgba($b1,1.0);
+    &:hover {
+      color:rgba($b1,0.5);
+    }
+  }
+}
+
+#file_clear, #file_clear2 {
+  display: none;
+  padding:1px 5px;
+  color:$w0;
+  background:$b3;
+  cursor:pointer;
+}
+
+label {
+  &.error {
+    color:$r1;
+    padding:3px 0 0 0;
+    margin:5px 0 0 5px;
+    display:block;
+    font-size:12px;
+    &:before {
+      content: "";
+      position:relative;
+      margin-right:5px;
+      background: url(../img/warning.svg) center no-repeat;
+      background-size: 100%;
+      width: 14px;
+      height: 13px;
+      display: inline-block;
+      top: 1.2px;
+    }
+  }
+}
+
+.required {
+  &:after {
+    content:"必須";
+    background: $tone_clr;
+    color:$w0;
+    position:relative;
+    top:0;
+    margin:0 0 0 5px;
+    padding:2px 5px;
+    font-size:12px;
+    border-radius: 2px;
+  }
+}
+
+.incap {
+  font-size:12px;
+}
+
+::placeholder {
+  color: $cc;
+  font-size:(8px*2)-2;
+}
+
+.input {
+  select {
+    appearance:button;
+    appearance:none;
+    text-indent: 0.01px;
+    padding:0 1em;
+    background:$ee url(../img/pulldown.png) no-repeat right center;
+    background-size:(4px*5) 10px;
+    height: 30px; line-height:30px;
+    font-size: 12px;
+    vertical-align: middle;
+    border:1px solid $cc;
+    margin-bottom:0;
+    position:relative;
+    cursor:pointer;
+  }
+}
+  
+@-moz-document url-prefix() {
+  .form_group select.input {
+    background:none;
+    background-color: $w0;
+  }
+}
+
+.slct {
+  &-6 { width:20%;}
+  &-5 { width:15%;}
+  &-4 { width:11%;}
+  &-3 { width:9%;}
+  &-2 { width:9%;}
+  &-1 { width:6%;}
+  &-entryPlan_kit { width:10%;}
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+textarea {
+  outline: none;
+  background:linear-gradient(top, rgba($w0,0.95) , $w0);
+  transition: all .3s;
+  border:1px solid $cc;
+  padding:14px;
+  font-size:16px;
+  border-radius: 6px;
+
+  &:focus {
+    box-shadow:0 0 7px rgba($b3,0.5);
+    border: 1px solid rgba($b3,0.5);
+    background:$w0;
+  }
+
+}
+
+input[type="text"]::-webkit-input-placeholder,
+input[type="tel"]::-webkit-input-placeholder,
+input[type="email"]::-webkit-input-placeholder,
+input[type="text"]:-ms-input-placeholder,
+input[type="tel"]:-ms-input-placeholder,
+input[type="email"]:-ms-input-placeholder,
+input[type="text"]::-moz-placeholder,
+input[type="tel"]::-moz-placeholder,
+input[type="email"]::-moz-placeholder {
+  color:$cc;
+  font-weight: normal;
+}
+
+
+/*---------------------------------------------------------------------------
+チェックボタン
+----------------------------------------------------------------------------*/
+.checkbtn_area { margin:5px 0 0 0; padding:0 0 0 0;}
+.checkbtn input[type="checkbox"] {display: none;}
+.checkbtn {cursor: pointer; position: relative;}
+.checkbtn .lever {display: block; color: $cc; display: inline-block; padding: 5px 30px 5px 30px; border: 1px solid $cc; margin:0 0 0 0; border-radius:20px; 
+  font-size:12px;
+-webkit-transition: all 300ms cubic-bezier(1, 0, 0, 1);
+-moz-transition: all 300ms cubic-bezier(1, 0, 0, 1);
+-o-transition: all 300ms cubic-bezier(1, 0, 0, 1);
+transition: all 300ms cubic-bezier(1, 0, 0, 1);
+-webkit-transition-timing-function: cubic-bezier(1, 0, 0, 1);
+-moz-transition-timing-function: cubic-bezier(1, 0, 0, 1);
+-o-transition-timing-function: cubic-bezier(1, 0, 0, 1);
+transition-timing-function: cubic-bezier(1, 0, 0, 1);
+}
+.checkbtn .lever:before {content:''; position: absolute; left: 4px; top:-2px; border: 1px solid $cc; background:$w0; width: 20px; height: 20px; 
+  border-radius:100%;;
+-webkit-transition: all 300ms cubic-bezier(1, 0, 0, 1);
+-moz-transition: all 300ms cubic-bezier(1, 0, 0, 1);
+-o-transition: all 300ms cubic-bezier(1, 0, 0, 1);
+transition: all 300ms cubic-bezier(1, 0, 0, 1);
+-webkit-transition-timing-function: cubic-bezier(1, 0, 0, 1);
+-moz-transition-timing-function: cubic-bezier(1, 0, 0, 1);
+-o-transition-timing-function: cubic-bezier(1, 0, 0, 1);
+transition-timing-function: cubic-bezier(1, 0, 0, 1);
+}
+.checkbtn:hover .lever:before {border-color:$cc;}
+.checkbtn input[type="checkbox"]:checked + .lever {background: $dd; color:$w0;}
+.checkbtn input[type="checkbox"]:checked + .lever {border-color:$dd;}
+.checkbtn input[type="checkbox"]:checked + .lever:before {left: 100%; margin-left: -26px; border-color:$w0;}
+
+/*---------------------------------------------------------------------------
+シンプルチェックボタン
+----------------------------------------------------------------------------*/
+.chkbtn {display: none;}
+.chkchr{padding-left: 22px; position:relative; margin-right: 8px; cursor: pointer; display: inline-block; font-size: 14px;}
+.chkchr::before{content: ""; display: block; position: absolute; top: 1px; left: 0; width: 15px; height: 15px; border: 1px solid $b9; border-radius:4px;}
+.chkbtn:checked + .chkchr{color: $cc;}
+.chkbtn:checked + .chkchr::after{content: ""; display: block; position: absolute; top: -5px; left: 5px; width: 7px; height: 14px; transform: rotate(40deg); border-bottom: 3px solid $cc; border-right: 3px solid $cc;}

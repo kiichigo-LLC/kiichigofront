@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+/*
+============================================================
+
+404ページ
+
+============================================================
+*/
+
+
+/* ob_facility-404
+------------------------------------------------------------ */
+.ob_facility-404 {
+  display: block;
+  padding: 80px 0 0 0;
+  margin: 0 0 0 0;
+  font-family: $dff;
+  overflow-x: hidden;
+  @media screen and (min-width: $brake_md+1) {
+    padding: 104px 0 0 0;
+  }
+  &-inr {
+    display: block;
+    padding: 0 16px 0;
+    margin: 0 auto 0;
+    box-sizing: border-box;
+    background: url(../img/404.png) center no-repeat;
+    background-size: 80%;
+    aspect-ratio: 2048/1200;
+    @media screen and (min-width: $brake_xl+1) {
+      padding: 0 0 0 0;
+      width: 1200px;
+    }
+  }
+  &-title {
+    text-align: left;
+  }
+  &-img {
+    img {
+      width: 100%;
+    }
+  }
+  &-text {
+    text-align: right;
+  }
+}

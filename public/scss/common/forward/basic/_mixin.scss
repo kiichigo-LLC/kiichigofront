@@ -1,0 +1,98 @@
+@charset "UTF-8";
+/*
+============================================================
+
+Mixin
+
+============================================================
+*/
+
+/* flexbox
+----------------------------------------------------------------*/
+@mixin flexbox {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+@mixin flexbox_j_cont($justify) {
+  -webkit-justify-content: $justify;
+     -moz-justify-content: $justify;
+      -ms-justify-content: $justify;
+          justify-content: $justify;
+            -ms-flex-pack: $justify;
+}
+@mixin flexbox_align_itm($align) {
+  -webkit-align-items: $align;
+     -moz-align-items: $align;
+      -ms-align-items: $align;
+          align-items: $align;
+}
+@mixin flexbox_wrap($wrap) {
+  -webkit-flex-wrap: $wrap;
+      -ms-flex-wrap: $wrap;
+          flex-wrap: $wrap;
+}
+
+
+/* Rex Breakpoint  ≥
+----------------------------------------------------------------*/
+$brake_i5: 320px;
+$brake_i6: 375px;
+$brake_sm: 576px;
+$brake_md: 768px;
+$brake_lg: 992px;
+$brake_sl: 1024px;
+$brake_xl: 1280px;
+$brake_xxl: 1440px;
+$brake_xxxl: 1600px;
+
+
+/* Standard Color
+----------------------------------------------------------------*/
+$w0: #ffffff;
+$ee: #eeeeee;
+$dd: #dddddd;
+$cc: #CCCCCC;
+$b0: #000000;
+$b1: #111111;
+$b2: #222222;
+$b3: #333333;
+$b4: #444444;
+$b5: #555555;
+$b6: #666666;
+$b7: #777777;
+$b8: #888888;
+$b9: #999999;
+
+$a1: #FF95DB;
+$g1: #FF95DB;
+
+$r1: #ff0000;
+$y1: #fff600;
+$cc: #cccccc;
+$dd: #dddddd;
+$ee: #eeeeee;
+$o1: #d4741a;
+$o2: #ee9117;
+
+
+/*---------------------------------------------
+WEBフォントをスムーズにする用
+ftsmz ---->  例→ @include ftsmz;
+---------------------------------------------*/
+@mixin ftsmz {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+/*---------------------------------------------
+文字省略用
+ellipsis ---->  例→ @include ellipsis;
+---------------------------------------------
+@mixin ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}*/

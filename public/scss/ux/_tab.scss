@@ -1,0 +1,73 @@
+/* 変数セット
+------------------------------------------------------------ */
+@use "../common" as *;
+
+
+/*
+============================================================
+
+tab
+
+============================================================
+*/
+
+@keyframes tabAnim {
+  0%{opacity:0;}
+  100%{opacity:1;}
+}
+
+.tab {
+  &-wrap {
+    input[type="radio"] {
+      display:none;
+    }
+  }
+  &-area {
+    font-size:0;
+    margin:0;
+    @include flexbox();
+    @include flexbox_j_cont(flex-start);
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    @media screen and (min-width: $brake_md+1) {
+      white-space: wrap;
+      overflow-x: hidden;
+      @include flexbox_j_cont(center);
+    }
+    label {
+      width:100%;
+      display:inline-block;
+      box-sizing: border-box;
+      color:$ee;
+      text-align:center;
+      font-size:(8px*3);
+      cursor:pointer;
+      transition:ease 0.2s opacity;
+      &:hover {
+        opacity:0.5;
+      }
+      &:active {
+        opacity:1.0;
+      }
+    }
+  }
+  &-panel {
+    display:none;
+  }
+}
+
+#tab1:checked ~ .tab-area .tab1_label,
+#tab2:checked ~ .tab-area .tab2_label,
+#tab3:checked ~ .tab-area .tab3_label,
+#tab4:checked ~ .tab-area .tab4_label {
+
+}
+#tab1:checked ~ .panel_area #panel1,
+#tab2:checked ~ .panel_area #panel2,
+#tab3:checked ~ .panel_area #panel3,
+#tab4:checked ~ .panel_area #panel4 {
+  display:block;
+  animation:tabAnim ease 0.6s forwards;
+  -ms-animation:tabAnim ease 0.6s forwards;
+}
