@@ -1,19 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/about/page": "app/about/page.js",
   "/contact/page": "app/contact/page.js",
-  "/contact/error/page": "app/contact/error/page.js",
-  "/contact/thanks/page": "app/contact/thanks/page.js",
-  "/dx/page": "app/dx/page.js",
-  "/koe/page": "app/koe/page.js",
-  "/page": "app/page.js",
-  "/koe/[slug]/page": "app/koe/[slug]/page.js",
-  "/portfolio/page": "app/portfolio/page.js",
-  "/tag/page": "app/tag/page.js",
-  "/tag/[slug]/page": "app/tag/[slug]/page.js",
-  "/trajectory/page": "app/trajectory/page.js",
-  "/portfolio/dtp/page": "app/portfolio/dtp/page.js",
-  "/trajectory/[slug]/page": "app/trajectory/[slug]/page.js",
-  "/web/page": "app/web/page.js",
-  "/web/[slug]/page": "app/web/[slug]/page.js"
+  "/page": "app/page.js"
 }
