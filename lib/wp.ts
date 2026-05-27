@@ -2,11 +2,11 @@
 
 import { WP } from "utils/config";
 
-export { SITE_NAME, SITE, WP, asset, path, canonical } from "utils/config";
+export { SITE_NAME, SITE, THEME, WP, asset, path, canonical } from "utils/config";
 
 export const FORM_CHECK_URL =
   process.env.NEXT_PUBLIC_FORM_CHECK_URL ||
-  "https://kiichigo.work/form/check.php";
+  "https://wp.kiichigo.work/form/check.php";
 export const RECAPTCHA_SITE_KEY =
   process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ||
   "6LdQSDIaAAAAAAkqYuSdqvkMmY0JtKB5fwjDUvJ4";

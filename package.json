@@ -3,16 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build:css": "node scripts/build-assets.mjs css",
-    "build:js": "node scripts/build-assets.mjs js",
-    "build:assets": "node scripts/build-assets.mjs",
-    "watch:css": "node scripts/watch-css.mjs",
-    "watch:js": "node scripts/watch-js.mjs",
-    "dev": "npm run build:assets && concurrently -k -n css,js,next \"npm:watch:css\" \"npm:watch:js\" \"next dev -p 1234\"",
-    "build": "npm run build:assets && next build",
+    "dev": "next dev -p 1234",
+    "build": "next build",
     "start": "next start -p 1234",
-    "lint": "eslint",
-    "sync-assets": "rsync -a --exclude='_notes' --exclude='*.dwsync.xml' ../llc/wp-content/themes/main/public/img/ public/img/ && rsync -a --exclude='_notes' --exclude='*.dwsync.xml' ../llc/wp-content/themes/main/public/scss/ public/scss/"
+    "lint": "eslint"
   },
   "dependencies": {
     "react": "19.1.0",
@@ -20,10 +14,6 @@
     "next": "15.5.18"
   },
   "devDependencies": {
-    "chokidar": "^3.6.0",
-    "concurrently": "^9.2.0",
-    "sass": "^1.77.8",
-    "terser": "^5.39.0",
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^19",
