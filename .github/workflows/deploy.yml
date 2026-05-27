@@ -1,0 +1,54 @@
+name: Deploy Next.js App to Vultr
+
+on:
+  push:
+    branches:
+      - main # mainブランチにプッシュ（マージ）されたら起動
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. GitHubのリポジトリからコードを取得
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Node.js環境のセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # お使いのNext.jsに合わせて適宜変更してください
+          cache: 'npm'
+
+      # 3. 依存パッケージのインストールとビルド（容量削減のためローカルで完結）
+      - name: Install dependencies & Build
+        run: |
+          npm ci
+          npm run build
+
+      # 4. 成果物一式をVultrの deployer ユーザー宛てに高速転送（rsync）
+      - name: Deploy to Vultr via rsync
+        uses: AEnterprise/rsync-deploy@v1.0.2
+        env:
+          DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-avzr --delete" # 古い不要なファイルを削除しつつ同期
+          SERVER_PORT: "22"
+          FOLDER: "./" # プロジェクト丸ごと転送（.nextやnode_modulesを含む）
+          SERVER_IP: ${{ secrets.SERVER_HOST }}
+          USERNAME: ${{ secrets.SERVER_USER }}
+          SERVER_DESTINATION: "/var/www/nextjs-apps/kiichigo.work/"
+
+      # 5. Vultr側でPM2をリロードし、ダウンタイムなしで最新サイトに切り替え
+      - name: Restart PM2 on Vultr
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/nextjs-apps/kiichigo.work
+            # まだPM2に登録されていない場合は登録し、登録済みの場合はリロードする
+            pm2 describe kiichigo-front > /dev/null && pm2 reload kiichigo-front || pm2 start npm --name "kiichigo-front" -- start
+            # サーバー再起動時にもPM2が自動起動するように設定を保存
+            pm2 save
