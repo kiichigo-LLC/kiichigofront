@@ -59,11 +59,34 @@ HTML は `:1234`、アセットは `:18080` のためフォントだけ CORS に
 cd ../llc && docker compose up -d --force-recreate wordpress
 ```
 
-## ローカル
+## ビルド・本番デプロイ
+
+静的 HTML を `out/` に出力する（`next.config.ts` の `output: "export"`）。
+
+```bash
+cd web
+npm run build   # → out/
+```
+
+`out/` の中身を Web サーバーのドキュメントルートへアップロードする（例: ロリポップの公開ディレクトリ）。Node プロセスは不要。
+
+- 記事・タグ URL はビルド時に WP API から一覧を取得して事前生成する
+- タグ一覧の 2 ページ目以降は `/tag/スラッグ/page/2`（クエリ `?page=` は使わない）
+- お問い合わせ完了・エラー画面の `form_type` / `form_error` はクライアントで URL クエリを読む
+
+ビルド成果物の確認:
+
+```bash
+npm run start   # serve で out/ を :1235 で表示（dev の :1234 とは別）
+```
+
+## ローカル開発
 
 ```bash
 cd ../llc && docker compose up -d
 cd web && cp .env.local.example .env.local && npm run dev
 ```
 
-http://localhost:1234
+http://localhost:1234（`npm run dev`）
+
+`out/` の確認は http://localhost:1235（`npm run start` または `npx serve@latest out`）

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageWarning } from "@/components/page-parts";
 import { DESC_TRAJ, pageMeta, titleWithSite } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import { WP, getArchiveTags, path, strip, trajDate, wpPath } from "@/lib/wp";
 
 const CATEGORY_SLUG = "trajectory";
@@ -13,7 +14,7 @@ const H1 = "ブログ";
 async function getPosts() {
   const res = await fetch(
     `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return [];
   return res.json();
@@ -29,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function TrajectoryCategoryPage() {
   const cat = await fetch(`${WP}/categories?slug=${CATEGORY_SLUG}`, {
-    next: { revalidate: 60 },
+    ...STATIC_FETCH,
   });
   if (!cat.ok) notFound();
   const cats: any = await cat.json();

@@ -6,7 +6,9 @@ import {
   PageWarning,
   SingleBackNav,
 } from "@/components/page-parts";
+import { postSlugParams } from "@/lib/build-params";
 import { metaForArticle } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import {
   WP,
   featuredImg,
@@ -20,12 +22,16 @@ import {
 const CATEGORY_SLUG = "trajectory";
 const CATEGORY_ID = 4;
 
+export async function generateStaticParams() {
+  return postSlugParams(CATEGORY_ID);
+}
+
 type Params = { slug: string };
 
 async function getPost(slug: string) {
   const res = await fetch(
     `${WP}/posts?slug=${encodeURIComponent(slug)}&_embed=wp:term,wp:featuredmedia`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return null;
   const posts: any = await res.json();
@@ -35,7 +41,7 @@ async function getPost(slug: string) {
 async function getAdjacent(currentSlug: string) {
   const res = await fetch(
     `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return { older: null, newer: null };
   const items: any = await res.json();

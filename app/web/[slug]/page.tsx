@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import {
   PageNav,
   PageWarning,
   PortfolioCloseNav,
   SingleBackNav,
 } from "@/components/page-parts";
+import { PortfolioAccessGuard } from "@/components/portfolio-access-guard";
+import { postSlugParams } from "@/lib/build-params";
 import { metaForArticle } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import {
   WP,
   asset,
   featuredImg,
   hasPortfolioTag,
   metaStr,
-  path,
   strip,
   PORTFOLIO_TAG_ID,
 } from "@/lib/wp";
@@ -22,13 +23,16 @@ import {
 const CATEGORY_SLUG = "web";
 const CATEGORY_ID = 2;
 
+export async function generateStaticParams() {
+  return postSlugParams(CATEGORY_ID);
+}
+
 type Params = { slug: string };
-type Search = { from?: string };
 
 async function getPost(slug: string) {
   const res = await fetch(
     `${WP}/posts?slug=${encodeURIComponent(slug)}&_embed=wp:featuredmedia,wp:term`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return null;
   const posts: any = await res.json();
@@ -42,7 +46,7 @@ async function getWebArchiveList() {
   do {
     const res = await fetch(
       `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&page=${page}&orderby=date&order=desc&tags_exclude=${PORTFOLIO_TAG_ID}&_embed=wp:term`,
-      { next: { revalidate: 60 } }
+      STATIC_FETCH
     );
     if (!res.ok) break;
     const items: any[] = await res.json();
@@ -85,13 +89,10 @@ export async function generateMetadata({
 
 export default async function WebSinglePage({
   params,
-  searchParams,
 }: {
   params: Promise<Params>;
-  searchParams: Promise<Search>;
 }) {
   const { slug } = await params;
-  const { from } = await searchParams;
 
   const post = await getPost(slug);
   if (!post || (post.categories && !post.categories.includes(CATEGORY_ID))) {
@@ -101,15 +102,6 @@ export default async function WebSinglePage({
   const title = strip(post.title.rendered);
   const meta = post.meta || {};
   const isPortfolio = hasPortfolioTag(post);
-
-  if (isPortfolio) {
-    const referer = (await headers()).get("referer") || "";
-    const fromPortfolio =
-      from === "portfolio" || referer.includes("/portfolio/");
-    if (!fromPortfolio) {
-      redirect(path("/web"));
-    }
-  }
 
   const myUrl = metaStr(meta, "myURL").trim();
   const webFolder = metaStr(meta, "WEB｜フォルダ名").trim();
@@ -122,6 +114,7 @@ export default async function WebSinglePage({
 
   return (
     <>
+      {isPortfolio ? <PortfolioAccessGuard /> : null}
       <SingleBackNav categorySlug={CATEGORY_SLUG} />
       <div className="single elm">
         <div className="single-inr elm-inr">

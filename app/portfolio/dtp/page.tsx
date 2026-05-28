@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageWarning } from "@/components/page-parts";
 import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import { WP, path } from "@/lib/wp";
 
 async function getDtpImages() {
-  const res = await fetch(`${WP}/pages?slug=dtp`, { next: { revalidate: 60 } });
+  const res = await fetch(`${WP}/pages?slug=dtp`, STATIC_FETCH);
   if (!res.ok) return [];
   const pages: any = await res.json();
   const html = pages[0]?.content?.rendered || "";
@@ -14,7 +15,7 @@ async function getDtpImages() {
   const ids = m[1].split(",").map((s: string) => parseInt(s.trim(), 10)).filter((n: number) => n > 0);
   const images: { id: number; url: string }[] = [];
   for (const id of ids) {
-    const mr = await fetch(`${WP}/media/${id}`, { next: { revalidate: 60 } });
+    const mr = await fetch(`${WP}/media/${id}`, STATIC_FETCH);
     if (!mr.ok) continue;
     const media: any = await mr.json();
     if (media.source_url) images.push({ id: media.id, url: media.source_url });

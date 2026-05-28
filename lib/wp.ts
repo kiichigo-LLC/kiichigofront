@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import { WP } from "utils/config";
 
 export { SITE_NAME, SITE, THEME, WP, asset, path, canonical } from "utils/config";
@@ -89,9 +90,7 @@ export async function featuredImg(post: any): Promise<string> {
   const mediaId = post.featured_media ?? 0;
   if (WP_MEDIA && mediaId > 0) {
     try {
-      const res = await fetch(`${WP_MEDIA}/wp-json/wp/v2/media/${mediaId}`, {
-        next: { revalidate: 3600 },
-      });
+      const res = await fetch(`${WP_MEDIA}/wp-json/wp/v2/media/${mediaId}`, STATIC_FETCH);
       if (res.ok) {
         const data: any = await res.json();
         if (data.source_url) return data.source_url;
@@ -105,7 +104,7 @@ export async function featuredImg(post: any): Promise<string> {
     try {
       const res = await fetch(
         `${WP_MEDIA}/wp-json/wp/v2/posts?slug=${encodeURIComponent(post.slug)}&_embed=wp:featuredmedia`,
-        { next: { revalidate: 3600 } }
+        STATIC_FETCH
       );
       if (res.ok) {
         const posts: any = await res.json();
@@ -124,7 +123,7 @@ export async function featuredImg(post: any): Promise<string> {
 export async function getArchiveTags() {
   const res = await fetch(
     `${WP}/tags?per_page=100&orderby=count&order=desc&hide_empty=true`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return [];
   const tags: any[] = await res.json();

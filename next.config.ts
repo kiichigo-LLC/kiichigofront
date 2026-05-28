@@ -1,10 +1,13 @@
+import path from "path";
+
 const nextConfig = {
+  output: "export" as const,
+  outputFileTracingRoot: path.join(process.cwd()),
   typescript: {
-    ignoreBuildErrors: process.env.DISABLE_BUILD_CHECK === 'true',
+    ignoreBuildErrors: process.env.DISABLE_BUILD_CHECK === "true",
   },
   eslint: {
-    // ❌ ignoreBuildFiles ではなく、正しくはこれです！
-    ignoreDuringBuilds: process.env.DISABLE_BUILD_CHECK === 'true',
+    ignoreDuringBuilds: process.env.DISABLE_BUILD_CHECK === "true",
   },
 };
 

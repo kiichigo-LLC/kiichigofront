@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageWarning } from "@/components/page-parts";
 import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import {
   WP,
   asset,
@@ -13,13 +14,13 @@ import {
 } from "@/lib/wp";
 
 async function getWebPosts() {
-  const cat = await fetch(`${WP}/categories?slug=web`, { next: { revalidate: 60 } });
+  const cat = await fetch(`${WP}/categories?slug=web`, STATIC_FETCH);
   const cats: any = await cat.json();
   const id = cats[0]?.id;
   if (!id) return [];
   const res = await fetch(
     `${WP}/posts?categories=${id}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return [];
   return res.json();

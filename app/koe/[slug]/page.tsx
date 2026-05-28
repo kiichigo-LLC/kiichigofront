@@ -5,19 +5,25 @@ import {
   PageWarning,
   SingleBackNav,
 } from "@/components/page-parts";
+import { postSlugParams } from "@/lib/build-params";
 import { metaForArticle } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import { WP, featuredImg, hasPortfolioTag, metaStr, strip } from "@/lib/wp";
 
 // --- カテゴリ設定（コピペで増やすときはここだけ変える） ---
 const CATEGORY_SLUG = "koe";
 const CATEGORY_ID = 3;
 
+export async function generateStaticParams() {
+  return postSlugParams(CATEGORY_ID);
+}
+
 type Params = { slug: string };
 
 async function getPost(slug: string) {
   const res = await fetch(
     `${WP}/posts?slug=${encodeURIComponent(slug)}&_embed=wp:featuredmedia,wp:term`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return null;
   const posts: any = await res.json();
@@ -27,7 +33,7 @@ async function getPost(slug: string) {
 async function getAdjacent(currentSlug: string) {
   const res = await fetch(
     `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return { older: null, newer: null };
   const items: any = await res.json();

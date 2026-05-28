@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageWarning } from "@/components/page-parts";
 import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import {
   WP,
   asset,
@@ -21,7 +22,7 @@ const H1 = "歌・作詞・作曲・ナレーション";
 async function getPosts() {
   const res = await fetch(
     `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return [];
   return res.json();
@@ -37,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function KoeCategoryPage() {
   const cat = await fetch(`${WP}/categories?slug=${CATEGORY_SLUG}`, {
-    next: { revalidate: 60 },
+    ...STATIC_FETCH,
   });
   if (!cat.ok) notFound();
   const cats: any = await cat.json();

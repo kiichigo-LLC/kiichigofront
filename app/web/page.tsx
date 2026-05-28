@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageWarning } from "@/components/page-parts";
 import { DESC_WEB_CAT, pageMeta, titleWithSite } from "@/lib/seo";
+import { STATIC_FETCH } from "@/lib/wp-fetch";
 import {
   WP,
   asset,
@@ -23,7 +24,7 @@ const H1 = "ホームページ制作・システム開発";
 async function getPosts() {
   const res = await fetch(
     `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia,wp:term&tags_exclude=${PORTFOLIO_TAG_ID}`,
-    { next: { revalidate: 60 } }
+    STATIC_FETCH
   );
   if (!res.ok) return [];
   const posts: any[] = await res.json();
@@ -40,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function WebCategoryPage() {
   const cat = await fetch(`${WP}/categories?slug=${CATEGORY_SLUG}`, {
-    next: { revalidate: 60 },
+    ...STATIC_FETCH,
   });
   if (!cat.ok) notFound();
   const cats: any = await cat.json();
