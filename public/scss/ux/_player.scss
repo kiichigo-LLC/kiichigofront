@@ -22,11 +22,11 @@ player
     }
     span {
       margin: 0 6px;
+      opacity: 1.0;
+      transition: all .5s;
       @media screen and (min-width: $brake_md+1) {
         margin: 0 4px;
       }
-      opacity: 1.0;
-      transition: all .5s;
       &:hover {
         opacity: .5;
       }
