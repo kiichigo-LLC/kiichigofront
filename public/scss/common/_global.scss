@@ -1,0 +1,96 @@
+/* 変数セット
+------------------------------------------------------------ */
+@use "forward" as *;
+
+
+/*
+============================================================
+
+全体共通
+
+============================================================
+*/
+
+
+html {
+  visibility: hidden;
+  &.wf-active, &.loading-delay {
+    visibility: visible;
+  }
+}
+
+
+html, body {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow-x: clip;
+}
+
+body {
+  font-family: $gwf;
+  font-weight: 400;
+  font-size: (8px*2);
+  letter-spacing: 1px;
+  color: $text_clr;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  width: 100%;
+}
+
+.wrap {
+  //display: block;
+  width: 100%;
+  //min-height: 100vh;
+  display: block;  // for IE
+  flex: 1 0 auto;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  //padding-bottom: 66px;
+  @media screen and (min-width: $brake_md+1) {
+
+  }
+}
+
+.none {
+  &tb {
+    display: none;
+    @media screen and (min-width: $brake_xl+1) {
+      display: block;
+    }
+  }
+  &sp {
+    display: none;
+    @media screen and (min-width: $brake_md+1) {
+      display: block;
+    }
+  }
+  &pc {
+    display: block;
+    @media screen and (min-width: $brake_sl+1) {
+      display: none;
+    }
+  }
+}
+
+.playicon {
+  &:before {
+    content: '';
+    display: inline-block;
+    cursor: pointer;
+    margin: 0 4px 0 0;
+    padding: 0 0;
+    width: 12px;
+    height: 12px;
+    background: url(../img/play.svg) center no-repeat;
+    background-size: cover;
+    @media screen and (min-width: $brake_md+1) {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}

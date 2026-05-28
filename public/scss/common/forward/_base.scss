@@ -1,0 +1,41 @@
+/*
+============================================================
+
+ベース
+
+============================================================
+*/
+
+
+/* basic
+------------------------------------------------------------ */
+@use "basic" as *; 
+
+
+/* webfont
+------------------------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@400;500&display=swap');
+$gwf: ryo-gothic-plusn, sans-serif;
+$gwf2: 'Yantramanav', sans-serif;
+
+
+/* ベース
+------------------------------------------------------------ */
+$base_clr: $w0;
+$tone_clr: #ff0348;
+$text_clr: #231815;
+$sub_clr: $b3;
+$line_clr: #f5f5f5;
+
+
+/* WEBフォントチラつき対策
+------------------------------------------------------------ */
+// html {
+//   visibility: hidden;
+// }
+// html.wf-active, html.loading-delay {
+//   visibility: visible;
+// }
+.preload {
+  transition:0 !important;
+}

@@ -5,6 +5,7 @@
 export const SITE_NAME =
   process.env.NEXT_PUBLIC_SITE_NAME || "合同会社キイチゴ";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/$/, "");
+// Deprecated: static assets are now served from web/public.
 export const THEME = (process.env.NEXT_PUBLIC_THEME_URL || "").replace(/\/$/, "");
 export const WP = (process.env.WP_API_URL || "").replace(/\/$/, "");
 
@@ -18,7 +19,7 @@ export const WP_CLIENT = (process.env.NEXT_PUBLIC_WP_API_URL || "").replace(
 );
 
 export function asset(p: string) {
-  return `${THEME}/${p.replace(/^\//, "")}`;
+  return `/${p.replace(/^\//, "")}`;
 }
 
 export function path(p: string) {

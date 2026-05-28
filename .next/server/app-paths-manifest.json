@@ -3,17 +3,17 @@
   "/contact/error/page": "app/contact/error/page.js",
   "/contact/thanks/page": "app/contact/thanks/page.js",
   "/contact/page": "app/contact/page.js",
-  "/dx/page": "app/dx/page.js",
   "/koe/entry/page": "app/koe/entry/page.js",
+  "/about/page": "app/about/page.js",
   "/koe/page": "app/koe/page.js",
   "/page": "app/page.js",
   "/portfolio/page": "app/portfolio/page.js",
-  "/portfolio/dtp/page": "app/portfolio/dtp/page.js",
-  "/tag/page": "app/tag/page.js",
-  "/about/page": "app/about/page.js",
   "/tag/entry/page": "app/tag/entry/page.js",
+  "/tag/page": "app/tag/page.js",
   "/trajectory/entry/page": "app/trajectory/entry/page.js",
+  "/dx/page": "app/dx/page.js",
+  "/trajectory/page": "app/trajectory/page.js",
   "/web/entry/page": "app/web/entry/page.js",
   "/web/page": "app/web/page.js",
-  "/trajectory/page": "app/trajectory/page.js"
+  "/portfolio/dtp/page": "app/portfolio/dtp/page.js"
 }

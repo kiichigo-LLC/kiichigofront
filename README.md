@@ -1,6 +1,6 @@
 # kiichigo — Next.js フロント
 
-`llc/` と同階層。HTML の型（レイアウト・ヘッダー等）は Next、**記事・一覧の中身はブラウザが WP REST API から取得**（jsrender 的な動き）。css/js/img は WP テーマ `themes/main/public/` 配下。
+`llc/` と同階層。HTML の型（レイアウト・ヘッダー等）は Next、**記事・一覧の中身はブラウザが WP REST API から取得**（jsrender 的な動き）。css/js/img は `web/public` から配信。
 
 ## 構成
 
@@ -42,7 +42,7 @@
 
 ## 静的ファイル
 
-`NEXT_PUBLIC_THEME_URL` → 例: `http://localhost:18080/wp-content/themes/main/public`
+WP テーマ側の `wp-content/themes/main/public/{css,img,js,scss}` を `web/public/{css,img,js,scss}` に移してフロントから直接配信します。
 
 ## ビルド・本番
 

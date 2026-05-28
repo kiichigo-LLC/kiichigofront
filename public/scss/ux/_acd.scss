@@ -1,0 +1,103 @@
+/* 変数セット
+------------------------------------------------------------ */
+@use "../common" as *;
+
+
+/*
+============================================================
+
+アコーディオン
+
+============================================================
+*/
+
+.acd {
+  &-check {
+    display: none;
+  }
+  &-label{
+    background: $w0;
+    color: $b3;
+    display: block;
+    padding: (8px*2) (8px*7) (8px*2) (8px*2);
+    position: relative;
+    font-size: (4px*4)-2;
+    text-align: justify;
+    font-weight: bold;
+    line-height: 1.2;
+    cursor: pointer;
+    //text-shadow: 1px 1px 1px rgba($b0, .6);
+    @media screen and (min-width: $brake_md+1) {
+      padding: (8px*2) (8px*3) (8px*2) (8px*2);
+      font-size: (4px*5);
+    }
+    &::after{
+      cursor: pointer;
+      content: '';
+      display: block;
+      width: 24px;
+      height: 24px;
+      top: 50%;
+      right: 2%;
+      background: url('../img/q.svg') center no-repeat;
+      background-size: 24px;
+      position: absolute;
+      padding: 0;
+      margin: (-4px*3) 0 0 0;
+      -webkit-transition: transform .4s;
+      transition: transform .4s;
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+      @media screen and (min-width: $brake_md+1) {
+        background-size: auto;
+        right: 1%;
+        width: 36px;
+        height: 36px;
+        background-size: 36px;
+        margin: -18px 0 0 0;
+      }
+      // padding: (8px*2);
+      // background: $base_clr;
+      // box-sizing: border-box;
+      // content: '\f117';
+      // display: block;
+      // font-family: "rex-icon";
+      // position: absolute;
+      // right: 0;
+      // top: 0px;
+    }
+  }
+  &-content{
+    display: block;
+    height: 0;
+    opacity: 0;
+    padding: 0 10px;
+    transition: .5s;
+    visibility: hidden;
+  }
+  &-check:checked + &-label{
+    color: $base_clr;
+  }
+  &-check:checked + &-label:after{
+    // content: '\f115';
+    // color: $tone_clr;
+    -webkit-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+    background: url('../img/a.svg') center no-repeat;
+    background-size: 24px;
+    @media screen and (min-width: $brake_md+1) {
+      background-size: 36px;
+    }
+  }
+  &-check:checked + &-label + &-content{
+    height: 100%;
+    opacity: 1;
+    visibility: visible;
+    background: $w0;
+    text-align: justify;
+    padding: (8px*1) (8px*2) (8px*2);
+    @media screen and (min-width: $brake_md+1) {
+      padding: (8px*1) (8px*3) (8px*3);
+    }
+  }
+}

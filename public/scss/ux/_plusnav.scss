@@ -1,0 +1,52 @@
+/* 変数セット
+------------------------------------------------------------ */
+@use "../common" as *;
+
+
+/*
+============================================================
+
+plusnav
+
+============================================================
+*/
+
+.plusnav {
+  & > ul > li:hover .plusnav-box {
+    opacity: 0;
+    @media screen and (min-width: $brake_md+1) {
+      max-height: 9999px;
+      opacity: 1;
+    }
+  }
+  &-box {
+    transition: all .2s ease-in;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    width: 100%;
+    left: 0;
+    position: absolute;
+
+    ol {
+      display: block;
+      padding: 16px;
+      li {
+        display: inline-block!important;
+        padding: 8px 0!important;
+        a {
+          span {
+            color: $b7!important;
+            font-weight: 100!important;
+          }
+          &:hover {
+            span {
+              color: $tone_clr!important;
+              font-weight: 100!important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
