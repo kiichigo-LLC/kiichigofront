@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SiteJsonLd } from "@/components/site-json-ld";
+import { HomeAiMessage } from "@/components/wp/home-ai-message";
 import { DESC_HOME, pageMeta } from "@/lib/seo";
 import { SITE_NAME, asset, canonical } from "@/lib/wp";
 
@@ -16,7 +17,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function HomePage() {
-  const msg = HOME_MSG.replace(/（/g, "(").replace(/）/g, ")");
   const showBan = new Date() < new Date("2026-09-26T00:00:00+09:00");
 
   return (
@@ -27,21 +27,7 @@ export default function HomePage() {
           <div className="main-home">
             <div className="main-home-inr">
               <span>
-                {msg}
-                <br />
-                {HOME_LOG ? (
-                  <>
-                    <small>
-                      <i>Log: {HOME_LOG}</i>
-                    </small>
-                    <br />
-                  </>
-                ) : null}
-                <small>
-                  合同会社キイチゴ
-                  <br />
-                  🤖AI
-                </small>
+                <HomeAiMessage fallbackMessage={HOME_MSG} fallbackLog={HOME_LOG} />
               </span>
             </div>
           </div>

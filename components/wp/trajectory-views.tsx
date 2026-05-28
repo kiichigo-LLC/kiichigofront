@@ -1,59 +1,24 @@
-import type { Metadata } from "next";
+"use client";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   PageNav,
   PageWarning,
   SingleBackNav,
 } from "@/components/page-parts";
-import { postSlugParams } from "@/lib/build-params";
-import { metaForArticle } from "@/lib/seo";
-import { STATIC_FETCH } from "@/lib/wp-fetch";
-import {
-  WP,
-  featuredImg,
-  metaStr,
-  path,
-  strip,
-  trajDate,
-  wpPath,
-} from "@/lib/wp";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { titleWithSite } from "@/lib/seo";
+import { featuredImgClient, getArchiveTagsClient, wpGet } from "@/lib/wp-client";
+import { extractYoutubeId, metaStr, path, strip, trajDate, wpPath } from "@/lib/wp";
+import { WpError, WpLoading } from "@/components/wp/wp-status";
 
 const CATEGORY_SLUG = "trajectory";
 const CATEGORY_ID = 4;
-
-export async function generateStaticParams() {
-  return postSlugParams(CATEGORY_ID);
-}
-
-type Params = { slug: string };
-
-async function getPost(slug: string) {
-  const res = await fetch(
-    `${WP}/posts?slug=${encodeURIComponent(slug)}&_embed=wp:term,wp:featuredmedia`,
-    STATIC_FETCH
-  );
-  if (!res.ok) return null;
-  const posts: any = await res.json();
-  return posts[0] || null;
-}
-
-async function getAdjacent(currentSlug: string) {
-  const res = await fetch(
-    `${WP}/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc`,
-    STATIC_FETCH
-  );
-  if (!res.ok) return { older: null, newer: null };
-  const items: any = await res.json();
-  const list = items.map((p: any) => ({
-    slug: p.slug,
-    title: strip(p.title.rendered),
-    permalink: p.link,
-  }));
-  const idx = list.findIndex((i: any) => i.slug === currentSlug);
-  if (idx === -1) return { older: null, newer: null };
-  return { older: list[idx + 1] || null, newer: list[idx - 1] || null };
-}
+const H1 = "ブログ";
 
 function extractTags(post: any) {
   const tags: any[] = [];
@@ -133,44 +98,163 @@ function TrajectoryLive({ meta }: { meta: any }) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPost(slug);
-  if (!post) return { title: "記事がありません" };
-  const title = strip(post.title.rendered);
-  const img = await featuredImg(post);
-  return metaForArticle(title, `/trajectory/${slug}`, img || undefined);
+export function TrajectoryListView() {
+  const [tags, setTags] = useState<any[] | null>(null);
+  const [posts, setPosts] = useState<any[] | null>(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [t, p] = await Promise.all([
+          getArchiveTagsClient(),
+          wpGet<any[]>(
+            `/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc`
+          ),
+        ]);
+        if (!cancelled) {
+          setTags(t);
+          setPosts(p);
+        }
+      } catch {
+        if (!cancelled) setError(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (error) return <WpError />;
+  if (!tags || !posts) return <WpLoading />;
+
+  return (
+    <div className="category elm">
+      <div className="category-inr elm-inr">
+        <h1 className="category-title elm-ttl">
+          <span>{H1}</span>
+        </h1>
+        <div className="tag-cloud">
+          <div className="tag-cloud-list">
+            <ol>
+              {tags.map((tag: any) => (
+                <li key={tag.id}>
+                  <a href={path(`/tag/${tag.slug}`)}>
+                    <span>
+                      <small>#</small>
+                      {tag.name}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+        <div className="category-main">
+          <div className="category-main-inr">
+            {posts.map((p: any) => (
+              <div className="category-list" key={p.id}>
+                <ul>
+                  <li>
+                    <a href={path(wpPath(p.link))}>
+                      <span className="category-list-date">{trajDate(p.date)}</span>
+                      <span className="category-list-title">{strip(p.title.rendered)}</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+        <PageWarning />
+      </div>
+    </div>
+  );
 }
 
-export default async function TrajectorySinglePage({
-  params,
-}: {
-  params: Promise<Params>;
-}) {
-  const { slug } = await params;
+function parseTrajectorySlug(pathname: string) {
+  const m = pathname.match(/^\/trajectory\/([^/]+)\/?$/);
+  const slug = m?.[1] ?? "";
+  return slug && slug !== "entry" ? slug : "";
+}
 
-  const post = await getPost(slug);
-  if (!post || (post.categories && !post.categories.includes(CATEGORY_ID))) {
-    notFound();
-  }
+export function TrajectoryEntryView() {
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  const slug = parseTrajectorySlug(pathname);
+  const [state, setState] = useState<"loading" | "error" | "ready" | "missing">("loading");
+  const [post, setPost] = useState<any>(null);
+  const [img, setImg] = useState("");
+  const [adjacent, setAdjacent] = useState<{
+    older: { title: string; permalink: string } | null;
+    newer: { title: string; permalink: string } | null;
+  }>({ older: null, newer: null });
 
-  const title = strip(post.title.rendered);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    if (!slug) {
+      setState("missing");
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const posts = await wpGet<any[]>(
+          `/posts?slug=${encodeURIComponent(slug)}&_embed=wp:term,wp:featuredmedia`
+        );
+        const p = posts[0];
+        if (!p || (p.categories && !p.categories.includes(CATEGORY_ID))) {
+          if (!cancelled) setState("missing");
+          return;
+        }
+        const list = await wpGet<any[]>(
+          `/posts?categories=${CATEGORY_ID}&per_page=100&orderby=date&order=desc`
+        );
+        const nav = list.map((item: any) => ({
+          slug: item.slug,
+          title: strip(item.title.rendered),
+          permalink: item.link,
+        }));
+        const idx = nav.findIndex((i) => i.slug === slug);
+        const image = await featuredImgClient(p);
+        if (!cancelled) {
+          setPost(p);
+          setImg(image);
+          setAdjacent({
+            older: nav[idx + 1] || null,
+            newer: nav[idx - 1] || null,
+          });
+          setState("ready");
+        }
+      } catch {
+        if (!cancelled) setState("error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [mounted, slug]);
+
+  const title = post ? strip(post.title.rendered) : "";
+  useDocumentTitle(post ? titleWithSite(title) : titleWithSite("記事"));
+
+  if (!mounted) return <WpLoading />;
+  if (!slug || state === "missing") return <WpError message="記事がありません。" />;
+  if (state === "error") return <WpError />;
+  if (state !== "ready" || !post) return <WpLoading />;
+
   const meta = post.meta || {};
   const tags = extractTags(post);
   const isCover = tags.some(
     (t: any) => t.name === "カバー" || t.slug === "tag_cover"
   );
-  const youtube = metaStr(meta, "youtube").trim();
+  const youtube = extractYoutubeId(metaStr(meta, "youtube"));
   const audio = metaStr(meta, "audio").trim();
-
-  const [adjacent, img] = await Promise.all([
-    getAdjacent(slug),
-    featuredImg(post),
-  ]);
 
   return (
     <>
@@ -237,12 +321,12 @@ export default async function TrajectorySinglePage({
                     <ol>
                       {tags.map((tag: any) => (
                         <li key={tag.id}>
-                          <Link href={path(wpPath(tag.link))}>
+                          <a href={path(wpPath(tag.link))}>
                             <span>
                               <small>#</small>
                               {tag.name}
                             </span>
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ol>

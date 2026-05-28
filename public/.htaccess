@@ -1,0 +1,42 @@
+# 静的 export（out/）をロリポップ等に置くとき用。
+# 記事 URL の実ファイルが無くても entry ページへ渡し、クライアントで WP API から表示する。
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteRule ^koe/entry\.html$ - [L]
+  RewriteRule ^web/entry\.html$ - [L]
+  RewriteRule ^trajectory/entry\.html$ - [L]
+  RewriteRule ^tag/entry\.html$ - [L]
+
+  # static export は /web.html 形式。末尾スラッシュアクセスを補正
+  RewriteRule ^about/?$ about.html [L]
+  RewriteRule ^contact/?$ contact.html [L]
+  RewriteRule ^dx/?$ dx.html [L]
+  RewriteRule ^koe/?$ koe.html [L]
+  RewriteRule ^web/?$ web.html [L]
+  RewriteRule ^trajectory/?$ trajectory.html [L]
+  RewriteRule ^tag/?$ tag.html [L]
+  RewriteRule ^portfolio/?$ portfolio.html [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^koe/[^/]+/?$ koe/entry.html [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^web/[^/]+/?$ web/entry.html [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^trajectory/[^/]+/?$ trajectory/entry.html [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^tag/[^/]+/page/[0-9]+/?$ tag/entry.html [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^tag/[^/]+/?$ tag/entry.html [L]
+</IfModule>

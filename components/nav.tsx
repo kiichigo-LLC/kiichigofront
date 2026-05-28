@@ -35,23 +35,23 @@ function SiteNav({ pathname }: { pathname: string }) {
         <div className="header-nav-main-list plusnav">
           <ul>
             <li>
-              <Link href={path("/about")}>
+              <Link href={path("/about")} prefetch={false}>
                 <ActiveLabel active={aboutActive}>合同会社キイチゴについて</ActiveLabel>
               </Link>
               <div className="plusnav-box">
                 <ol>
                   <li>
-                    <Link href={path("/about/#unkr-01")}>
+                    <Link href={path("/about/#unkr-01")} prefetch={false}>
                       <span>会社概要</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href={path("/about/#unkr-02")}>
+                    <Link href={path("/about/#unkr-02")} prefetch={false}>
                       <span>ロゴについて</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href={path("/dx")}>
+                    <Link href={path("/dx")} prefetch={false}>
                       <span>DX推進方針について</span>
                     </Link>
                   </li>
@@ -59,22 +59,22 @@ function SiteNav({ pathname }: { pathname: string }) {
               </div>
             </li>
             <li>
-              <Link href={path("/koe")}>
+              <Link href={path("/koe")} prefetch={false}>
                 <ActiveLabel active={koeActive}>声の仕事</ActiveLabel>
               </Link>
             </li>
             <li>
-              <Link href={path("/web")}>
+              <Link href={path("/web")} prefetch={false}>
                 <ActiveLabel active={webActive}>ウェブの仕事</ActiveLabel>
               </Link>
             </li>
             <li>
-              <Link href={path("/trajectory")}>
+              <Link href={path("/trajectory")} prefetch={false}>
                 <ActiveLabel active={trajectoryActive}>ブログ</ActiveLabel>
               </Link>
             </li>
             <li>
-              <Link href={path("/contact")}>
+              <Link href={path("/contact")} prefetch={false}>
                 <ActiveLabel active={contactActive}>お問い合わせ</ActiveLabel>
               </Link>
             </li>
@@ -101,7 +101,7 @@ function SnsNav() {
               <span className="icon-github"></span>
             </a>
           </li>
-          <li>
+          {/* <li>
             <a
               href="https://www.youtube.com/@%E3%81%8A%E3%82%8C%E3%83%80%E3%83%A9"
               target="_blank"
@@ -109,7 +109,7 @@ function SnsNav() {
             >
               <span className="icon-youtube"></span>
             </a>
-          </li>
+          </li> */}
         </ol>
       </div>
     </div>

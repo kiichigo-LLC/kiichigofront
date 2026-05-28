@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev -p 1234",
     "build": "next build",
+    "build:prod": "([ -f .env.local ] && mv .env.local .env.local.bak || true) && next build; s=$?; ([ -f .env.local.bak ] && mv .env.local.bak .env.local || true); exit $s",
     "start": "npx serve@latest out -l 1235",
     "lint": "eslint"
   },

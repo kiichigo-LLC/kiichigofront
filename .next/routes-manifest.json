@@ -15,52 +15,41 @@
   "headers": [],
   "rewrites": {
     "beforeFiles": [],
-    "afterFiles": [],
+    "afterFiles": [
+      {
+        "source": "/wp-media-proxy/:path*",
+        "destination": "https://wp.kiichigo.work/wp-json/wp/v2/:path*",
+        "regex": "^/wp-media-proxy(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      },
+      {
+        "source": "/koe/:slug",
+        "destination": "/koe/entry",
+        "regex": "^/koe(?:/([^/]+?))(?:/)?$"
+      },
+      {
+        "source": "/web/:slug",
+        "destination": "/web/entry",
+        "regex": "^/web(?:/([^/]+?))(?:/)?$"
+      },
+      {
+        "source": "/trajectory/:slug",
+        "destination": "/trajectory/entry",
+        "regex": "^/trajectory(?:/([^/]+?))(?:/)?$"
+      },
+      {
+        "source": "/tag/:slug/page/:page",
+        "destination": "/tag/entry",
+        "regex": "^/tag(?:/([^/]+?))/page(?:/([^/]+?))(?:/)?$"
+      },
+      {
+        "source": "/tag/:slug",
+        "destination": "/tag/entry",
+        "regex": "^/tag(?:/([^/]+?))(?:/)?$"
+      }
+    ],
     "fallback": []
   },
-  "dynamicRoutes": [
-    {
-      "page": "/koe/[slug]",
-      "regex": "^/koe/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPslug": "nxtPslug"
-      },
-      "namedRegex": "^/koe/(?<nxtPslug>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/tag/[slug]",
-      "regex": "^/tag/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPslug": "nxtPslug"
-      },
-      "namedRegex": "^/tag/(?<nxtPslug>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/tag/[slug]/page/[pageNum]",
-      "regex": "^/tag/([^/]+?)/page/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPslug": "nxtPslug",
-        "nxtPpageNum": "nxtPpageNum"
-      },
-      "namedRegex": "^/tag/(?<nxtPslug>[^/]+?)/page/(?<nxtPpageNum>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/trajectory/[slug]",
-      "regex": "^/trajectory/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPslug": "nxtPslug"
-      },
-      "namedRegex": "^/trajectory/(?<nxtPslug>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/web/[slug]",
-      "regex": "^/web/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPslug": "nxtPslug"
-      },
-      "namedRegex": "^/web/(?<nxtPslug>[^/]+?)(?:/)?$"
-    }
-  ],
+  "dynamicRoutes": [],
   "staticRoutes": [
     {
       "page": "/",
@@ -111,6 +100,12 @@
       "namedRegex": "^/koe(?:/)?$"
     },
     {
+      "page": "/koe/entry",
+      "regex": "^/koe/entry(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/koe/entry(?:/)?$"
+    },
+    {
       "page": "/portfolio",
       "regex": "^/portfolio(?:/)?$",
       "routeKeys": {},
@@ -129,16 +124,34 @@
       "namedRegex": "^/tag(?:/)?$"
     },
     {
+      "page": "/tag/entry",
+      "regex": "^/tag/entry(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tag/entry(?:/)?$"
+    },
+    {
       "page": "/trajectory",
       "regex": "^/trajectory(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/trajectory(?:/)?$"
     },
     {
+      "page": "/trajectory/entry",
+      "regex": "^/trajectory/entry(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/trajectory/entry(?:/)?$"
+    },
+    {
       "page": "/web",
       "regex": "^/web(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/web(?:/)?$"
+    },
+    {
+      "page": "/web/entry",
+      "regex": "^/web/entry(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/web/entry(?:/)?$"
     }
   ],
   "dataRoutes": [],

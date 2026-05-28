@@ -18,7 +18,7 @@ export function Header() {
         <div className="header-inr">
           <div className="header-logo">
             <LogoTag className="header-logo-img">
-              <Link href={path("/")}>
+              <Link href={path("/")} prefetch={false}>
                 <img src={asset("img/logo_s.svg")} alt="合同会社キイチゴ" />
               </Link>
             </LogoTag>

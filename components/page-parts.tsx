@@ -21,7 +21,7 @@ export function SingleBackNav({ categorySlug }: { categorySlug: string }) {
     <nav>
       <div className="single-back">
         <div className="single-back-link">
-          <Link href={path(`/${categorySlug}`)}>前に戻る</Link>
+          <Link href={path(`/${categorySlug}`)} prefetch={false}>前に戻る</Link>
         </div>
       </div>
     </nav>
@@ -40,17 +40,17 @@ export function PageNav({
       <div className="pagenav-inr">
         <div className="pagenav-prev">
           {older ? (
-            <Link href={path(wpPath(older.permalink))} title={older.title}>
+            <a href={path(wpPath(older.permalink))} title={older.title}>
               <i className="fa fa-angle-left"></i> 前へ{" "}
-            </Link>
+            </a>
           ) : null}
         </div>
         <div className="pagenav-center"> ｜ </div>
         <div className="pagenav-next">
           {newer ? (
-            <Link href={path(wpPath(newer.permalink))} title={newer.title}>
+            <a href={path(wpPath(newer.permalink))} title={newer.title}>
               次へ <i className="fa fa-angle-right"></i>
-            </Link>
+            </a>
           ) : null}
         </div>
       </div>
