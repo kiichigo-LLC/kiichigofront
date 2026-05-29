@@ -7,7 +7,7 @@ import { asset, canonical, SITE_NAME } from "utils/config";
 
 /** トップ・about など */
 export const DESC_HOME =
-  "東京世田谷区でホームページ制作、音楽制作を行う、合同会社キイチゴのホームページ";
+  "東京・世田谷区の合同会社キイチゴ。ホームページ制作からECサイト構築、公開後の保守・運用まで一気通貫で対応いたします。各種Web制作の業務委託（パートナー契約）のご相談も承ります。音楽制作事業との連携もお任せください。";
 
 /** WP のサイト説明（未設定時は DESC_HOME） */
 export const DESC_SITE =
