@@ -21,7 +21,13 @@ function ActiveLabel({
 }
 
 // 左カラム：会社概要・カテゴリ・お問い合わせなど
-function SiteNav({ pathname }: { pathname: string }) {
+function SiteNav({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+}) {
   const isHome = pathname === "/";
   const aboutActive = pathname.startsWith("/about") && !isHome;
   const contactActive = pathname.startsWith("/contact") && !isHome;
@@ -35,23 +41,23 @@ function SiteNav({ pathname }: { pathname: string }) {
         <div className="header-nav-main-list plusnav">
           <ul>
             <li>
-              <Link href={path("/about")} prefetch={false}>
+              <Link href={path("/about")} prefetch={false} onClick={onNavigate}>
                 <ActiveLabel active={aboutActive}>合同会社キイチゴについて</ActiveLabel>
               </Link>
               <div className="plusnav-box">
                 <ol>
                   <li>
-                    <Link href={path("/about/#unkr-01")} prefetch={false}>
+                    <Link href={path("/about/#unkr-01")} prefetch={false} onClick={onNavigate}>
                       <span>会社概要</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href={path("/about/#unkr-02")} prefetch={false}>
+                    <Link href={path("/about/#unkr-02")} prefetch={false} onClick={onNavigate}>
                       <span>ロゴについて</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href={path("/dx")} prefetch={false}>
+                    <Link href={path("/dx")} prefetch={false} onClick={onNavigate}>
                       <span>DX推進方針について</span>
                     </Link>
                   </li>
@@ -59,22 +65,22 @@ function SiteNav({ pathname }: { pathname: string }) {
               </div>
             </li>
             <li>
-              <Link href={path("/koe")} prefetch={false}>
+              <Link href={path("/koe")} prefetch={false} onClick={onNavigate}>
                 <ActiveLabel active={koeActive}>声の仕事</ActiveLabel>
               </Link>
             </li>
             <li>
-              <Link href={path("/web")} prefetch={false}>
+              <Link href={path("/web")} prefetch={false} onClick={onNavigate}>
                 <ActiveLabel active={webActive}>ウェブの仕事</ActiveLabel>
               </Link>
             </li>
             <li>
-              <Link href={path("/trajectory")} prefetch={false}>
+              <Link href={path("/trajectory")} prefetch={false} onClick={onNavigate}>
                 <ActiveLabel active={trajectoryActive}>ブログ</ActiveLabel>
               </Link>
             </li>
             <li>
-              <Link href={path("/contact")} prefetch={false}>
+              <Link href={path("/contact")} prefetch={false} onClick={onNavigate}>
                 <ActiveLabel active={contactActive}>お問い合わせ</ActiveLabel>
               </Link>
             </li>
@@ -117,11 +123,17 @@ function SnsNav() {
 }
 
 /** header.tsx から呼ぶ。左=メインメニュー、右=SNS */
-export function Nav({ pathname }: { pathname: string }) {
+export function Nav({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+}) {
   return (
     <div className="header-nav-inr">
       <div className="header-nav-r">
-        <SiteNav pathname={pathname} />
+        <SiteNav pathname={pathname} onNavigate={onNavigate} />
       </div>
       <div className="header-nav-l">
         <SnsNav />

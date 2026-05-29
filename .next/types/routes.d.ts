@@ -5,7 +5,7 @@ type AppRoutes = "/" | "/about" | "/contact" | "/contact/error" | "/contact/than
 type PageRoutes = never
 type LayoutRoutes = "/"
 type RedirectRoutes = never
-type RewriteRoutes = "/koe/[slug]" | "/tag/[slug]" | "/tag/[slug]/page/[page]" | "/trajectory/[slug]" | "/web/[slug]" | "/wp-media-proxy/[[...path]]"
+type RewriteRoutes = "/koe/[slug]" | "/tag/[slug]" | "/tag/[slug]/page/[page]" | "/trajectory/[slug]" | "/web/[slug]" | "/wp-media-proxy/[[...path]]" | "/wp-uploads-proxy/[[...path]]"
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes
 
 
@@ -32,6 +32,7 @@ interface ParamMap {
   "/web/[slug]": { "slug": string; }
   "/web/entry": {}
   "/wp-media-proxy/[[...path]]": { "path"?: string[]; }
+  "/wp-uploads-proxy/[[...path]]": { "path"?: string[]; }
 }
 
 

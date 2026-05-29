@@ -13,6 +13,7 @@ import {
 } from "@/components/page-parts";
 import { PortfolioAccessGuard } from "@/components/portfolio-access-guard";
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useSingleWebIframeScroll } from "@/hooks/use-single-web-iframe-scroll";
 import { titleWithSite } from "@/lib/seo";
 import { featuredImgClient, wpGet, wpGetWithHeaders } from "@/lib/wp-client";
 import {
@@ -213,12 +214,16 @@ export function WebEntryView() {
   }, [mounted, slug]);
 
   const title = post ? strip(post.title.rendered) : "";
+  const myUrlForScroll =
+    state === "ready" && post ? metaStr(post.meta || {}, "myURL").trim() : "";
   useDocumentTitle(post ? titleWithSite(title) : titleWithSite("記事"));
+  useSingleWebIframeScroll(Boolean(myUrlForScroll));
 
-  if (!mounted) return <WpLoading />;
-  if (!slug || state === "missing") return <WpError message="記事がありません。" />;
-  if (state === "error") return <WpError />;
-  if (state !== "ready" || !post) return <WpLoading />;
+  if (mounted && (!slug || state === "missing")) {
+    return <WpError message="記事がありません。" />;
+  }
+  if (mounted && state === "error") return <WpError />;
+  if (!mounted || state !== "ready" || !post) return <WpLoading />;
 
   const meta = post.meta || {};
   const isPortfolio = hasPortfolioTag(post);

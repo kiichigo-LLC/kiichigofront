@@ -1,3 +1,19 @@
 {
-  "/portfolio/dtp/page": "app/portfolio/dtp/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/about/page": "app/about/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/contact/error/page": "app/contact/error/page.js",
+  "/dx/page": "app/dx/page.js",
+  "/contact/thanks/page": "app/contact/thanks/page.js",
+  "/koe/entry/page": "app/koe/entry/page.js",
+  "/koe/page": "app/koe/page.js",
+  "/page": "app/page.js",
+  "/portfolio/dtp/page": "app/portfolio/dtp/page.js",
+  "/portfolio/page": "app/portfolio/page.js",
+  "/tag/entry/page": "app/tag/entry/page.js",
+  "/tag/page": "app/tag/page.js",
+  "/trajectory/entry/page": "app/trajectory/entry/page.js",
+  "/trajectory/page": "app/trajectory/page.js",
+  "/web/entry/page": "app/web/entry/page.js",
+  "/web/page": "app/web/page.js"
 }

@@ -188,10 +188,11 @@ export function KoeEntryView() {
   const title = post ? strip(post.title.rendered) : "";
   useDocumentTitle(post ? titleWithSite(title) : titleWithSite("記事"));
 
-  if (!mounted) return <WpLoading />;
-  if (!slug || state === "missing") return <WpError message="記事がありません。" />;
-  if (state === "error") return <WpError />;
-  if (state !== "ready" || !post) return <WpLoading />;
+  if (mounted && (!slug || state === "missing")) {
+    return <WpError message="記事がありません。" />;
+  }
+  if (mounted && state === "error") return <WpError />;
+  if (!mounted || state !== "ready" || !post) return <WpLoading />;
 
   const meta = post.meta || {};
   const youtube = extractYoutubeId(metaStr(meta, "youtube"));

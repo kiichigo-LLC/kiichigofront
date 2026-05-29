@@ -22,6 +22,11 @@
         "regex": "^/wp-media-proxy(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
       },
       {
+        "source": "/wp-uploads-proxy/:path*",
+        "destination": "https://wp.kiichigo.work/wp-content/uploads/:path*",
+        "regex": "^/wp-uploads-proxy(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      },
+      {
         "source": "/koe/:slug",
         "destination": "/koe/entry",
         "regex": "^/koe(?:/([^/]+?))(?:/)?$"

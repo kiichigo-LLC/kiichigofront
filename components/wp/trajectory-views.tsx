@@ -4,7 +4,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   PageNav,
   PageWarning,
@@ -92,6 +92,45 @@ function TrajectoryLive({ meta }: { meta: any }) {
               </dd>
             ) : null}
           </dl>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function TrajectoryAudioPlayer({ src }: { src: string }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const back = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    setPlaying(false);
+  };
+
+  const toggle = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (!audio.paused) {
+      audio.pause();
+      setPlaying(false);
+      return;
+    }
+    void audio.play().then(() => setPlaying(true));
+  };
+
+  return (
+    <>
+      <audio ref={audioRef} src={src} id="player" onEnded={back} />
+      <div className="player">
+        <div className="player-inr">
+          <span
+            className={playing ? "player-paus" : "player-play"}
+            onClick={toggle}
+          />
+          <span className="player-back" onClick={back} />
         </div>
       </div>
     </>
@@ -243,10 +282,11 @@ export function TrajectoryEntryView() {
   const title = post ? strip(post.title.rendered) : "";
   useDocumentTitle(post ? titleWithSite(title) : titleWithSite("記事"));
 
-  if (!mounted) return <WpLoading />;
-  if (!slug || state === "missing") return <WpError message="記事がありません。" />;
-  if (state === "error") return <WpError />;
-  if (state !== "ready" || !post) return <WpLoading />;
+  if (mounted && (!slug || state === "missing")) {
+    return <WpError message="記事がありません。" />;
+  }
+  if (mounted && state === "error") return <WpError />;
+  if (!mounted || state !== "ready" || !post) return <WpLoading />;
 
   const meta = post.meta || {};
   const tags = extractTags(post);
@@ -295,18 +335,12 @@ export function TrajectoryEntryView() {
                           <div className="single-audio-title">
                             <span>
                               {title}
-                              {isCover ? <small> (カバー)</small> : null}
+                              {isCover ? <small> (カバー)</small> : null}を
                             </span>
-                            を聴く
+                            聴く
                           </div>
                           <div className="single-audio-player">
-                            <audio src={audio} id="player" />
-                            <div className="player">
-                              <div className="player-inr">
-                                <span className="player-play"></span>
-                                <span className="player-back"></span>
-                              </div>
-                            </div>
+                            <TrajectoryAudioPlayer src={audio} />
                           </div>
                         </div>
                       </div>

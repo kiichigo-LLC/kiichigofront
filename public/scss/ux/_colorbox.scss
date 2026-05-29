@@ -20,10 +20,10 @@ colorbox
 }
 
 #colorbox, #cboxOverlay, #cboxWrapper {
-  position:absolute;
-  top:0;
-  left:0;
-  z-index:9999;
+  // position:absolute;
+  // top:0;
+  // left:0;
+  // z-index:9999;
 }
 
 #colorbox, #cboxContent, #cboxLoadedContent {
@@ -261,6 +261,35 @@ colorbox
   }
 }
 
+
+/* kiichigo-lightbox（React 実装）オープン時 */
+body.cbox-open {
+  overflow: hidden;
+
+  #cboxOverlay {
+    display: block !important;
+  }
+
+  #colorbox {
+    display: block !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 10000;
+  }
+
+  #cboxOverlay {
+    z-index: 9999;
+  }
+
+  #cboxLoadedContent img.cboxPhoto {
+    // max-width: 90vw;
+    // max-height: 90vh;
+    width: auto;
+    max-height: 640px;
+  }
+}
 
 /*---------------------------------------------------------------------------
 colorbox IE

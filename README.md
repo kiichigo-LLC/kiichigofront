@@ -79,7 +79,6 @@ cd web && npm run dev
 `npm run dev` で以下が自動実行されます。
 
 - `public/scss/style.scss` → `public/css/style.css` をコンパイル
-- `public/js/{check,player,script,toploading}.js` → 各 `*.min.js` を minify
 - 以降は SCSS/JS 変更を watch して自動再生成
 
 http://localhost:1234 — 記事 URL は `next.config.ts` の `rewrites` で entry に渡す。

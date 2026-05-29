@@ -5,10 +5,8 @@
   "scripts": {
     "assets:scss": "sass public/scss/style.scss public/css/style.css --style=compressed --source-map",
     "assets:scss:watch": "sass --watch public/scss/style.scss:public/css/style.css --style=compressed --source-map",
-    "assets:js": "terser public/js/check.js -c -m -o public/js/check.min.js && terser public/js/player.js -c -m -o public/js/player.min.js && terser public/js/script.js -c -m -o public/js/script.min.js && terser public/js/toploading.js -c -m -o public/js/toploading.min.js",
-    "assets:js:watch": "chokidar \"public/js/{check,player,script,toploading}.js\" -c \"npm run assets:js\"",
-    "assets:build": "npm run assets:scss && npm run assets:js",
-    "assets:watch": "concurrently -k \"npm run assets:scss:watch\" \"npm run assets:js:watch\"",
+    "assets:build": "npm run assets:scss",
+    "assets:watch": "npm run assets:scss:watch",
     "dev": "npm run assets:build && concurrently -k \"next dev -p 1234\" \"npm run assets:watch\"",
     "build": "npm run assets:build && next build",
     "build:prod": "([ -f .env.local ] && mv .env.local .env.local.bak || true) && npm run assets:build && next build; s=$?; ([ -f .env.local.bak ] && mv .env.local.bak .env.local || true); exit $s",

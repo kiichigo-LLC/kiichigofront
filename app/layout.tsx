@@ -3,7 +3,8 @@ import Script from "next/script";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { HomeLoading } from "@/components/home-loading";
-import { LayoutScripts } from "@/components/layout-scripts";
+import { TouchHoverFix } from "@/components/touch-hover-fix";
+import { LightboxBinder } from "@/components/lightbox-binder";
 import { asset } from "utils/config";
 import "./globals.css";
 
@@ -63,13 +64,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           {`(function(d){var config={kitId:'zjo5ojg',scriptTimeout:3000,async:true},h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\\bwf-loading\\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)})(document);`}
         </Script>
 
-        <Script
-          src="https://code.jquery.com/jquery-3.5.1.js"
-          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-58GB3CJ"
@@ -88,7 +82,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <Footer />
         </div>
 
-        <LayoutScripts />
+        <LightboxBinder />
+        <TouchHoverFix />
       </body>
     </html>
   );

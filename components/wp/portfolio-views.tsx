@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PageWarning } from "@/components/page-parts";
+import { resolvePublicMediaUrl } from "@/lib/media-url";
 import { featuredImgClient, wpGet } from "@/lib/wp-client";
 import { asset, extractYoutubeId, metaStr, path, strip, wpPath } from "@/lib/wp";
 import { WpError, WpLoading } from "@/components/wp/wp-status";
@@ -249,43 +250,6 @@ export function PortfolioDtpView() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!images || images.length === 0) return;
-
-    let cancelled = false;
-    let retries = 0;
-    const maxRetries = 20;
-
-    const initColorbox = () => {
-      if (cancelled) return;
-      const w = window as typeof window & { $?: any; jQuery?: any };
-      const $ = w.jQuery || w.$;
-      if (!$ || !$.fn?.colorbox) {
-        retries += 1;
-        if (retries <= maxRetries) {
-          window.setTimeout(initColorbox, 150);
-        }
-        return;
-      }
-
-      const $groups = $(".category-main.dtp .group");
-      if (!$groups.length) return;
-      $groups.colorbox({
-        rel: "slideshow",
-        fixed: true,
-        maxWidth: "90%",
-        maxHeight: "90%",
-        transition: "none",
-        opacity: 0.9,
-      });
-    };
-
-    initColorbox();
-    return () => {
-      cancelled = true;
-    };
-  }, [images]);
-
   if (error) return <WpError />;
   if (!images) return <WpLoading />;
 
@@ -312,17 +276,20 @@ export function PortfolioDtpView() {
         <div className="category-main dtp">
           <div className="category-main-inr elm-flex between">
             {images.length > 0 ? (
-              images.map((image) => (
-                <div className="elm-box dtp" key={image.id}>
-                  <div className="elm-box-inr">
-                    <div className="elm-box-img">
-                      <a href={image.url} className="group cboxElement">
-                        <img src={image.url} className="dsn contain" alt="" />
-                      </a>
+              images.map((image) => {
+                const mediaUrl = resolvePublicMediaUrl(image.url);
+                return (
+                  <div className="elm-box dtp" key={image.id}>
+                    <div className="elm-box-inr">
+                      <div className="elm-box-img">
+                        <a href={mediaUrl} className="group cboxElement">
+                          <img src={mediaUrl} className="dsn contain" alt="" />
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <p>ギャラリーが見つかりません。</p>
             )}

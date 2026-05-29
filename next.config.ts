@@ -17,10 +17,15 @@ const nextConfig = {
   /** 開発時: 記事 URL を entry に渡す（本番は public/.htaccess） */
   async rewrites() {
     return [
-      /** ローカル dev: 本番 uploads 取得（ブラウザ CORS 回避） */
+      /** ローカル dev: 本番 REST（ブラウザ CORS 回避） */
       {
         source: "/wp-media-proxy/:path*",
         destination: "https://wp.kiichigo.work/wp-json/wp/v2/:path*",
+      },
+      /** ローカル dev: 本番 uploads 画像（ライトボックス等） */
+      {
+        source: "/wp-uploads-proxy/:path*",
+        destination: "https://wp.kiichigo.work/wp-content/uploads/:path*",
       },
       { source: "/koe/:slug", destination: "/koe/entry" },
       { source: "/web/:slug", destination: "/web/entry" },

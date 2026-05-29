@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { resolvePublicMediaUrl } from "@/lib/media-url";
 import { SITE, WP_CLIENT } from "utils/config";
 import { PORTFOLIO_TAG_ID } from "@/lib/wp-utils";
 
@@ -143,14 +144,17 @@ function featuredFromPost(post: any): string {
 function normalizeMediaUrl(url: string): string {
   const v = (url || "").trim();
   if (!v) return "";
-  if (/^https?:\/\//i.test(v)) return v;
-  const base = WP_MEDIA_REMOTE || WP_CLIENT;
-  if (!base) return v;
-  try {
-    return new URL(v, base.endsWith("/") ? base : `${base}/`).toString();
-  } catch {
-    return v;
+  let absolute = v;
+  if (!/^https?:\/\//i.test(v)) {
+    const base = WP_MEDIA_REMOTE || WP_CLIENT;
+    if (!base) return v;
+    try {
+      absolute = new URL(v, base.endsWith("/") ? base : `${base}/`).toString();
+    } catch {
+      return v;
+    }
   }
+  return resolvePublicMediaUrl(absolute);
 }
 
 export async function featuredImgClient(post: any): Promise<string> {

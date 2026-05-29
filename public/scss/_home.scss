@@ -189,11 +189,13 @@
       z-index: 10;
       opacity: 1;
     }
-    &.close {
-      opacity: 0;
-      z-index: -3;
-      .header-nav-inr {
-        display: none;
+    @media screen and (max-width: $brake_sl) {
+      &.close {
+        opacity: 0;
+        z-index: -3;
+        .header-nav-inr {
+          display: none;
+        }
       }
     }
 
@@ -1255,6 +1257,11 @@
         font-size: 16px;
         width: 92%;
         line-height: 1.4;
+      }
+      span {
+        @media screen and (max-width: $brake_md) {
+          display: none;
+        }
       }
     }
     &-player {
