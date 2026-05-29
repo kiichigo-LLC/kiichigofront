@@ -6,7 +6,7 @@ import { DESC_SITE, pageMeta, titleWithSite } from "@/lib/seo";
 import { asset, canonical, path } from "@/lib/wp";
 
 const PATH = "/about";
-const PAGE_TITLE = "無駄のない体制で、<br className='nonepc' />確かなクオリティを。";
+const PAGE_TITLE = "合同会社キイチゴについて";
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMeta({
@@ -35,10 +35,10 @@ export default function AboutPage() {
               Web制作と音楽制作を行う<br className='nonepc' />
               世田谷区の小さな会社です。<br />
               <br />
-              見た目の美しさはもちろん、<br />
+              見た目の美しさはもちろん、<br className="nonepc" />
               使いやすさを徹底的に考えた<br className='nonepc' />
               UI/UXデザインを得意としており、<br />
-              一般的なホームページから、<br />
+              一般的なホームページから、<br className="nonepc" />
               <b>「検索に強く、売上を育てるECサイト」</b><br className='nonepc' />
               の構築、<br className='nonesp' />
               日々の保守・運用、<br className='nonepc' />
@@ -46,18 +46,18 @@ export default function AboutPage() {
               窓口ひとつで臨機応変に対応します。<br />
               <br />
               日々の業務には<br className='nonepc' />
-              最新のAIを深く取り入れ、<br />
+              最新のAIを深く取り入れ、<br className="nonepc" />
               様々なツールを連動させることで、<br />
-              1人でありながら大手に負けない<br />
+              1人でありながら大手に負けない<br className="nonepc" />
               多角的な提案と<br className='nonepc' />
               スピード感を持たせています。<br />
               <br />
-              単なる制作に留まらず、<br />
+              単なる制作に留まらず、<br className="nonepc" />
               どうすれば成果が出るかを<br className='nonepc' />
               共に見据えるパートナーとして、<br />
               <b>「大手に頼むほどではないけれど、<br className='nonepc' />
-              技術のわかるプロに直接相談したい」</b><br />
-              という期待に、<br className='nonepc' />
+              技術のわかるプロに直接相談したい」</b><br className="nonepc" />
+              という期待に、<br />
               確かな実装力でお応えします。
             </div>
           </div>
